@@ -1,14 +1,19 @@
+require("dotenv").config({ path: "./server/config/.env" });
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config({path:"./server/config/.env"});
+const passport = require("./passport/setup");
 
 const app = express();
-app.use(express.json({ extended: true }));
 
-app.get("*", (req, res) => {
+app.use(passport.initialize());
+
+app.use(express.json({ extended: true }));
+app.use("/auth", require("./routes/auth.routes"));
+
+app.get("/", (req, res) => {
   res.send("Server");
-})
-console.log(process.env.PORT)
+});
+
 const PORT = process.env.PORT;
 async function start() {
   try {

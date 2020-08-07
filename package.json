@@ -1,0 +1,31 @@
+{
+  "name": "cellural-automata-tycoon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoophHD/cellural-automata-tycoon.git"
+  },
+  "keywords": [
+    "react",
+    "mern"
+  ],
+  "author": "Danila Sizykh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MoophHD/cellural-automata-tycoon/issues"
+  },
+  "homepage": "https://github.com/MoophHD/cellural-automata-tycoon#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.27"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

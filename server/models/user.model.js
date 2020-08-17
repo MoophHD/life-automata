@@ -10,6 +10,7 @@ const User = new Schema({
     enum: ["Local", "Google", "Github"],
     required: true,
   },
+  providerId: String
 });
 
 module.exports = model("User", User);

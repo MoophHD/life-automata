@@ -1,21 +1,25 @@
 import React, { useEffect } from "react";
 import { useHttp } from "./hooks/http.hook";
-// import { BrowserRouter as Router } from "react-router-dom";
+import { useAuth } from "./hooks/auth.hook";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import AuthContext from "./context/auth.context";
+import Home from './pages/Home';
 
 function App() {
+  const { login, logout, userId } = useAuth();
   const { request } = useHttp();
-  //proxy fetch test
-  useEffect(() => {
-    async function fetchData() {
-      const result = await request("api/test", "GET");
 
-      console.log(result);
-    }
-
-    fetchData();
-  }, [request]);
-
-  return <h1>bruh</h1>;
+  return (
+    <AuthContext.Provider value={{ login, logout, userId }}>
+      <Router>
+        <Switch>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
+    </AuthContext.Provider>
+  );
 }
 
 export default App;

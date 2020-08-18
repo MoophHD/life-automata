@@ -23,7 +23,7 @@ const Container = styled.button`
   background-color: #fc2323;
   box-shadow: 0px 0.35rem 0px #740000;
   border: none;
-  margin: 0 2em;
+  margin: 0 1.75em;
   display: flex;
   justify-content: center;
   align-items: center;

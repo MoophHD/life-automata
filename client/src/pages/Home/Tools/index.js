@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import LifeNav from "./LifeNav";
+import Controls from "./Controls";
 
-function Tools({ setRunning, setOptions }) {
+const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
   return (
     <Container>
       <LifeNav
-        onStepOut={() => {}}
-        onStepIn={() => {}}
-        onTogglePlay={() => {}}
+        onStepOut={onStepOut}
+        onStepIn={onStepIn}
+        onTogglePlay={onTogglePlay}
       />
+      <Controls />
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   background-color: pink;

@@ -1,19 +1,33 @@
 import React, { useState } from "react";
-import styled from 'styled-components';
-import PlayArea from './PlayArea';
-import Tools from './Tools';
+import styled from "styled-components";
+import PlayArea from "./PlayArea";
+import Tools from "./Tools";
 
 function Home() {
   const [grid, setGrid] = useState([]);
   const [running, setRunning] = useState(false);
-  const [options, setOptions] = useState({x: 50, y: 50, interval: 1000});
+  const [options, setOptions] = useState({ x: 50, y: 50, interval: 1000 });
+  const [step, setStep] = useState(0);
+
+  const onStepIn = () => {
+    setStep(step++);
+  };
+
+  const onStepOut = () => {
+    setStep(step--);
+  };
 
   return (
     <Container>
-      <PlayArea grid={grid} running={running} options={options}/>
-      <Tools setRunning={setRunning} setOptions={setOptions}/>
+      <PlayArea step={step} grid={grid} running={running} options={options} />
+      <Tools
+        onStepIn={onStepIn}
+        onStepOut={onStepOut}
+        onTogglePlay={() => setRunning(!running)}
+        setOptions={setOptions}
+      />
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
@@ -21,7 +35,6 @@ const Container = styled.div`
   grid-template-columns: 2fr minmax(min-content, 1fr);
   height: 100%;
   width: 100vw;
-`
-
+`;
 
 export default Home;

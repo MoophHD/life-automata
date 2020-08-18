@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from 'styled-components';
-import Grid from '../../components/Grid';
+import Grid from '../../../components/Grid';
 
 function PlayArea({grid, running, options}) {
   useEffect(() => {

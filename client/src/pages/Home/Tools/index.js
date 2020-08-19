@@ -17,7 +17,7 @@ const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
 };
 
 const Container = styled.div`
-  background-color: pink;
+  background-color: #0B0F34;
 `;
 
 export default Tools;

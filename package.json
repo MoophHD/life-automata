@@ -30,6 +30,7 @@
     "passport": "^0.4.1",
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
+    "react-hook-form": "^6.4.1",
     "styled-components": "^5.1.1"
   },
   "devDependencies": {

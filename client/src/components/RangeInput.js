@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Ruler from "./Ruler";
 
 //thump
-const thumpSize = 0.9; //rem
+const thumpSize = 0.8; //rem
 const borderSize = 0.3; //rem
 //input
 const inputSidePart = 0.4; //rem
@@ -13,7 +13,8 @@ const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
   return (
     <Container>
       <RulerWrapper count={count}>
-        <Ruler count={count} />
+        {/* TODO: Add stumps */}
+        <Ruler stumps={null} count={count} />
       </RulerWrapper>
 
       <Input
@@ -30,25 +31,26 @@ const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
   );
 };
 
+const RulerWrapper = styled.div`
+  position: absolute;
+  top: 49%;
+  transform: translateY(-25%);
+  width: 100%;
+  padding: ${props => `0 calc(calc(${inputSidePart}rem - ${100/props.count/2}% + ${thumpSize * 0.5}rem) / ${1 - 1/props.count})`};
+`
+
 const Container = styled.div`
   width: 100%;
   position: relative;
-  min-height: 2rem;
+  min-height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: .5em;
 `
 
-const RulerWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  padding: ${props => `0 calc(calc(${inputSidePart}rem - ${100/props.count/2}% + ${thumpSize * 0.5}rem) / ${1 - 1/props.count})`};
-`
-
 const Input = styled.input`
+z-index: 1;
   margin: 0;
   width: 100%;
   -webkit-appearance: none;
@@ -68,9 +70,7 @@ const Input = styled.input`
   }
 
   &::-webkit-slider-thumb {
-
-    margin-top: -0.7rem;
-    transform: translate(0, 50%);
+    transform: translate(0, -25%);
     -webkit-appearance: none;
     height: ${thumpSize}rem;
     width: ${thumpSize}rem;
@@ -81,7 +81,13 @@ const Input = styled.input`
     cursor: pointer;
   }
 
-  &::before {
+  &::-webkit-slider-runnable-track {
+    height: 0.45em;
+    width: 100%;
+    background-color: white;
+  }
+
+  &:before {
     content: "";
     position: absolute;
     height: 0.45em;
@@ -92,7 +98,8 @@ const Input = styled.input`
     border-bottom-left-radius: 50%;
   }
 
-  &::after {
+  &:after {
+    z-index: -1;
     content: "";
     position: absolute;
     height: 0.45em;
@@ -103,12 +110,6 @@ const Input = styled.input`
     border-bottom-right-radius: 50%;
   }
 
-  &::-webkit-slider-runnable-track {
-    height: 0.45em;
-    width: 100%;
-    background-color: white;
-  }
-
   &::-moz-range-thumb {
     height: ${thumpSize}rem;
     width: ${thumpSize}rem;
@@ -117,6 +118,18 @@ const Input = styled.input`
     box-shadow: 0 0 0 ${borderSize}rem #fc2323;
     background: #ffffff;
     cursor: pointer;
+  }
+
+  &::-moz-range-track {
+    height: 0.45em;
+    width: 100%;
+    background-color: white;
+  }
+
+  &::-ms-track {
+    height: 0.45em;
+    width: 100%;
+    background-color: white;
   }
 
   &::-ms-thumb {

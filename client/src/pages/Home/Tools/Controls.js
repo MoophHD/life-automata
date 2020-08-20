@@ -17,48 +17,47 @@ const Controls = ({
   return (
     <>
       {folded ? (
-        <ToggleBtn onClick={() => setFolded(false)}>
-          <DownArrow /> More Options
-        </ToggleBtn>
+        <ControlsContainer>
+          <ToggleBtn onClick={() => setFolded(false)}>
+            <DownArrow /> More Options
+          </ToggleBtn>
+        </ControlsContainer>
       ) : (
         <>
           <ControlsContainer>
-            <div style={{ margin: "auto" }}>
+            <InputWrapper style={{ paddingRight: "1rem" }}>
               x:
               <DimensionInput name="x" defaultValue={defaultX} ref={register} />
               y:
               <DimensionInput name="y" defaultValue={defaultY} ref={register} />
-            </div>
-            <div style={{ margin: "auto" }}>
+            </InputWrapper>
+            <InputWrapper style={{ flex: 1, minWidth: "250px" }}>
               speed:
               <RangeInput
-                style={{ direction: "rtl"}}
+                style={{ direction: "rtl" }}
                 min={50}
                 max={950}
                 step={100}
                 defaultValue={defaultInterval}
                 register={register}
               />
-              {/* <input
-                name="interval"
-                style={{ direction: "rtl" }}
-                type="range"
-                min="50"
-                max="1050"
-                step={100}
-                defaultValue={defaultInterval}
-                ref={register}
-              /> */}
-            </div>
-          </ControlsContainer>
-          <ToggleBtn onClick={() => setFolded(true)}>
+            </InputWrapper>
+            <ToggleBtn onClick={() => setFolded(true)}>
             <DownArrow isUp={true} /> Less Options
           </ToggleBtn>
+          </ControlsContainer>
+  
         </>
       )}
     </>
   );
 };
+
+const InputWrapper = styled.div`
+  margin: auto;
+  display: flex;
+  align-items: center;
+`;
 
 const ControlsContainer = styled.div`
   color: white;
@@ -68,6 +67,9 @@ const ControlsContainer = styled.div`
   flex-wrap: wrap;
   justify-items: center;
   align-content: center;
+  margin: auto;
+
+  align-self: flex-end;
 `;
 
 const DimensionInput = styled.input`
@@ -91,6 +93,7 @@ const DimensionInput = styled.input`
 `;
 
 const ToggleBtn = styled.button`
+  margin: auto;
   background: none;
   border: none;
   outline: none;

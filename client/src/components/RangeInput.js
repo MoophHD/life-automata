@@ -5,12 +5,13 @@ import Ruler from "./Ruler";
 //thump
 const thumpSize = 0.9; //rem
 const borderSize = 0.3; //rem
+//input
 const inputSidePart = 0.4; //rem
 
 const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
   const count = ~~(max - min) / step + 1;
   return (
-    <>
+    <Container>
       <RulerWrapper count={count}>
         <Ruler count={count} />
       </RulerWrapper>
@@ -25,13 +26,26 @@ const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
         defaultValue={defaultValue}
         ref={register}
       />
-    </>
+    </Container>
   );
 };
 
-const RulerWrapper = styled.div`
+const Container = styled.div`
   width: 100%;
-  padding: ${props => `0 calc(calc(${inputSidePart}rem - ${100/props.count/2}%) / ${1 - 1/props.count})`};
+  position: relative;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: .5em;
+`
+
+const RulerWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  padding: ${props => `0 calc(calc(${inputSidePart}rem - ${100/props.count/2}% + ${thumpSize * 0.5}rem) / ${1 - 1/props.count})`};
 `
 
 const Input = styled.input`
@@ -54,22 +68,17 @@ const Input = styled.input`
   }
 
   &::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 1px;
-    height: 50px;
-    margin-top: -0.7rem;
-    background-color: tomato;
 
-    // margin-top: -0.7rem;
-    // transform: translateY(50%);
-    // -webkit-appearance: none;
-    // height: ${thumpSize}rem;
-    // width: ${thumpSize}rem;
-    // border-radius: 50%;
-    // border: none;
-    // box-shadow: 0 0 0 ${borderSize}rem #fc2323;
-    // background: #ffffff;
-    // cursor: pointer;
+    margin-top: -0.7rem;
+    transform: translate(0, 50%);
+    -webkit-appearance: none;
+    height: ${thumpSize}rem;
+    width: ${thumpSize}rem;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 0 0 ${borderSize}rem #fc2323;
+    background: #ffffff;
+    cursor: pointer;
   }
 
   &::before {
@@ -78,7 +87,7 @@ const Input = styled.input`
     height: 0.45em;
     left: 0;
     width: ${inputSidePart}rem;
-    background-color: tomato;
+    background-color: white;
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
   }
@@ -89,7 +98,7 @@ const Input = styled.input`
     height: 0.45em;
     right: 0;
     width: ${inputSidePart}rem;
-    background-color: tomato;
+    background-color: white;
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
   }

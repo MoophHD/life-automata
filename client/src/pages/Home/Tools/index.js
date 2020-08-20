@@ -18,6 +18,10 @@ const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
 
 const Container = styled.div`
   background-color: #0B0F34;
+  padding: 0 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export default Tools;

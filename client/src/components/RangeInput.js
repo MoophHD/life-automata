@@ -1,11 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import Ruler from "./Ruler";
+
+//thump
+const thumpSize = 0.9; //rem
+const borderSize = 0.3; //rem
+const inputSidePart = 0.4; //rem
 
 const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
+  const count = ~~(max - min) / step + 1;
   return (
     <>
-      {/* <Ruler length={~~((max-min)/step)} /> */}
-      <Ruler length={5} />
+      <RulerWrapper count={count}>
+        <Ruler count={count} />
+      </RulerWrapper>
 
       <Input
         name="interval"
@@ -20,51 +28,19 @@ const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
     </>
   );
 };
-//stump = {0: {title: ""}}
-const Ruler = ({ stumps = {}, length }) => {
-  //must return lines like in ruler with stumps representing bigger lines with titles udnerneath
-  return <Scale length={length} />;
-};
 
-const color = "tomato";
-const width = 2; //px
-
-const gedGradientRecepy = (length) => {
-  const recepy = [];
-  const gapPercentage = 100 / (length - 1);
-
-  //draws line than gap
-  for (let i = 0; i < length - 1; i++) {
-    recepy.push(`${color} ${gapPercentage * i}%`);
-    recepy.push(`${color} calc(${gapPercentage * i}% + ${width}px)`);
-    recepy.push(`transparent calc(${gapPercentage * i}% + ${width}px)`);
-    recepy.push(`transparent ${gapPercentage * (i + 1)}%`);
-  }
-
-  //last gap has to be shorter in order to accomodate the last line
-  recepy.pop();
-  recepy.push(`transparent calc(100% - ${width}px)`);
-  // *.5 is a workaround, google renders the list line at 2 * width
-  recepy.push(`${color} calc(100% - ${width * 0.5}px), ${color} 100%`);
-
-  return recepy.join(",");
-};
-const Scale = styled.div`
-  width: 200px;
-  height: 40px;
-  background: linear-gradient(
-    90deg,
-    ${(props) => gedGradientRecepy(props.length)}
-  );
-`;
-
-const thumpSize = 0.9; //rem
-const borderSize = 0.3; //rem
+const RulerWrapper = styled.div`
+  width: 100%;
+  padding: ${props => `0 calc(calc(${inputSidePart}rem - ${100/props.count/2}%) / ${1 - 1/props.count})`};
+`
 
 const Input = styled.input`
+  margin: 0;
+  width: 100%;
   -webkit-appearance: none;
   background: transparent;
-  padding: 0.4rem;
+  position: relative;
+  padding: 0 ${inputSidePart}rem;
 
   &:focus {
     outline: none;
@@ -78,23 +54,50 @@ const Input = styled.input`
   }
 
   &::-webkit-slider-thumb {
-    margin-top: -0.7rem;
-    transform: translateY(50%);
     -webkit-appearance: none;
-    height: ${thumpSize}rem;
-    width: ${thumpSize}rem;
-    border-radius: 50%;
-    border: none;
-    box-shadow: 0 0 0 ${borderSize}rem #fc2323;
-    background: #ffffff;
-    cursor: pointer;
+    width: 1px;
+    height: 50px;
+    margin-top: -0.7rem;
+    background-color: tomato;
+
+    // margin-top: -0.7rem;
+    // transform: translateY(50%);
+    // -webkit-appearance: none;
+    // height: ${thumpSize}rem;
+    // width: ${thumpSize}rem;
+    // border-radius: 50%;
+    // border: none;
+    // box-shadow: 0 0 0 ${borderSize}rem #fc2323;
+    // background: #ffffff;
+    // cursor: pointer;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    height: 0.45em;
+    left: 0;
+    width: ${inputSidePart}rem;
+    background-color: tomato;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    height: 0.45em;
+    right: 0;
+    width: ${inputSidePart}rem;
+    background-color: tomato;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
   }
 
   &::-webkit-slider-runnable-track {
     height: 0.45em;
     width: 100%;
     background-color: white;
-    border-radius: 2rem;
   }
 
   &::-moz-range-thumb {

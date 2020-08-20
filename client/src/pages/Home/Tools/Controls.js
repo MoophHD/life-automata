@@ -34,7 +34,7 @@ const Controls = ({
               <RangeInput
                 style={{ direction: "rtl"}}
                 min={50}
-                max={1050}
+                max={950}
                 step={100}
                 defaultValue={defaultInterval}
                 register={register}

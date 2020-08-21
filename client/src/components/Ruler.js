@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Ruler = ({ stumps = { 1: { text: "t" }, 3: { text: "b" } }, count }) => {
+const Ruler = ({ stumps = {}, count }) => {
   return (
     <Table>
       <tbody>

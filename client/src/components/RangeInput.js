@@ -14,7 +14,7 @@ const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
     <Container>
       <RulerWrapper count={count}>
         {/* TODO: Add stumps */}
-        <Ruler stumps={null} count={count} />
+        <Ruler stumps={{ 1: { text: "t" }, 3: { text: "b" } }} count={count} />
       </RulerWrapper>
 
       <Input

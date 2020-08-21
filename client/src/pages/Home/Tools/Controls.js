@@ -11,7 +11,7 @@ const Controls = ({
   defaultInterval = 1000,
 }) => {
   const [folded, setFolded] = useState(false);
-  const { register, handleSubmit, error } = useForm();
+  const { register, error } = useForm();
 
   //add hook for all the input stuff
   return (
@@ -23,31 +23,28 @@ const Controls = ({
           </ToggleBtn>
         </ControlsContainer>
       ) : (
-        <>
-          <ControlsContainer>
-            <InputWrapper style={{ paddingRight: "1rem" }}>
-              x:
-              <DimensionInput name="x" defaultValue={defaultX} ref={register} />
-              y:
-              <DimensionInput name="y" defaultValue={defaultY} ref={register} />
-            </InputWrapper>
-            <InputWrapper style={{ flex: 1, minWidth: "250px" }}>
-              speed:
-              <RangeInput
-                style={{ direction: "rtl" }}
-                min={50}
-                max={950}
-                step={100}
-                defaultValue={defaultInterval}
-                register={register}
-              />
-            </InputWrapper>
-            <ToggleBtn onClick={() => setFolded(true)}>
+        <ControlsContainer>
+          <InputWrapper>
+            <label style={{}}>x:</label>
+            <DimensionInput name="x" defaultValue={defaultX} ref={register} />
+            <label>y:</label>
+            <DimensionInput name="y" defaultValue={defaultY} ref={register} />
+          </InputWrapper>
+          <InputWrapper style={{ flex: 1, minWidth: "250px" }}>
+            <label>speed:</label>
+            <RangeInput
+              style={{ direction: "rtl" }}
+              min={50}
+              max={950}
+              step={100}
+              defaultValue={defaultInterval}
+              register={register}
+            />
+          </InputWrapper>
+          <ToggleBtn onClick={() => setFolded(true)}>
             <DownArrow isUp={true} /> Less Options
           </ToggleBtn>
-          </ControlsContainer>
-  
-        </>
+        </ControlsContainer>
       )}
     </>
   );
@@ -57,6 +54,11 @@ const InputWrapper = styled.div`
   margin: auto;
   display: flex;
   align-items: center;
+  padding-right: 1.35rem;
+
+  &:last-of-type {
+    padding-right: 0;
+  }
 `;
 
 const ControlsContainer = styled.div`
@@ -79,16 +81,14 @@ const DimensionInput = styled.input`
   height: 2.37rem;
   width: 3.3rem;
   outline: none;
-  border-sizing: content-box;
   font-weight: 600;
   text-align: center;
   margin-left: 0.35rem;
-
   &:focus {
     box-shadow: 0 0 0 0.125rem #fc2323;
   }
-  &:first-child {
-    margin-right: 1.5rem;
+  &:first-of-type {
+    margin-right: 0.7rem;
   }
 `;
 

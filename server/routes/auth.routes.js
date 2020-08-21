@@ -27,11 +27,9 @@ router.post("/register", async (req, res) => {
 router.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] }, (req, res) => {
-    console.log("github first call");
   })
 );
 router.get("/github/callback", passport.authenticate("github"), (req, res) => {
-  console.log(`github callback`);
   res.send("Bruh");
 });
 

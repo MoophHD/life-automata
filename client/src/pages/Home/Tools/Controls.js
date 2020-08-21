@@ -11,28 +11,38 @@ const Controls = ({
   defaultInterval = 1000,
 }) => {
   const [folded, setFolded] = useState(false);
-  const { register, error } = useForm();
+  const { register, errors } = useForm({mode:"onChange",});
 
+  const dimensionValidation = {
+    isInteger: (value) => !!parseInt(value)
+  };
+  
   //add hook for all the input stuff
   return (
     <>
       {folded ? (
         <ControlsContainer>
-          <ToggleBtn onClick={() => setFolded(false)}>
+          <ToggleBtn onClick={() => setFolded({mode:"onChange", reValidateMode: "onChange"})}>
             <DownArrow /> More Options
           </ToggleBtn>
         </ControlsContainer>
       ) : (
         <ControlsContainer>
           <InputWrapper>
-            <label style={{}}>x:</label>
-            <DimensionInput name="x" defaultValue={defaultX} ref={register} />
+            <label>x:</label>
+            <DimensionInput
+              name="x"
+              defaultValue={defaultX}
+              ref={register({ required: true, validate: dimensionValidation})}
+            />
+            {console.log(errors)}
             <label>y:</label>
             <DimensionInput name="y" defaultValue={defaultY} ref={register} />
           </InputWrapper>
           <InputWrapper style={{ flex: 1, minWidth: "250px" }}>
             <label>speed:</label>
             <RangeInput
+              name="interval"
               style={{ direction: "rtl" }}
               min={50}
               max={950}

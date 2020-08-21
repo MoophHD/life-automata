@@ -9,6 +9,11 @@ function App() {
   const { login, logout, userId } = useAuth();
   const { request } = useHttp();
 
+  useEffect(() => {
+    // TODO: Auth
+    request();
+  }, [])
+
   return (
     <AuthContext.Provider value={{ login, logout, userId }}>
       <Router>

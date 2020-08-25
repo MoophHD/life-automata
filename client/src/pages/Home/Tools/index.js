@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import LifeNav from "./LifeNav";
 import Controls from "./Controls";
+import Patterns from './Patterns';
 
 const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
   return (
     <Container>
+      <Patterns />
       <LifeNav
         onStepOut={onStepOut}
         onStepIn={onStepIn}

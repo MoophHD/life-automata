@@ -11,18 +11,18 @@ const Controls = ({
   defaultInterval = 1000,
 }) => {
   const [folded, setFolded] = useState(false);
-  const { register, errors } = useForm({mode:"onChange",});
+  const { register, errors } = useForm({ mode: "onChange" });
 
   const dimensionValidation = {
-    isInteger: (value) => !!parseInt(value)
+    isInteger: (value) => !!parseInt(value),
   };
-  
+
   //add hook for all the input stuff
   return (
     <>
       {folded ? (
         <ControlsContainer>
-          <ToggleBtn onClick={() => setFolded({mode:"onChange", reValidateMode: "onChange"})}>
+          <ToggleBtn onClick={() => setFolded(false)}>
             <DownArrow /> More Options
           </ToggleBtn>
         </ControlsContainer>
@@ -33,11 +33,17 @@ const Controls = ({
             <DimensionInput
               name="x"
               defaultValue={defaultX}
-              ref={register({ required: true, validate: dimensionValidation})}
+              hasError={!!errors.x}
+              ref={register({ required: true, validate: dimensionValidation })}
             />
             {console.log(errors)}
             <label>y:</label>
-            <DimensionInput name="y" defaultValue={defaultY} ref={register} />
+            <DimensionInput
+              name="y"
+              defaultValue={defaultY}
+              hasError={!!errors.y}
+              ref={register({ required: true, validate: dimensionValidation })}
+            />
           </InputWrapper>
           <InputWrapper style={{ flex: 1, minWidth: "250px" }}>
             <label>speed:</label>
@@ -65,7 +71,6 @@ const InputWrapper = styled.div`
   display: flex;
   align-items: center;
   padding-right: 1.35rem;
-
   &:last-of-type {
     padding-right: 0;
   }
@@ -85,6 +90,8 @@ const ControlsContainer = styled.div`
 `;
 
 const DimensionInput = styled.input`
+  background: ${(props) => (props.hasError ? "#fc2323" : "white")};
+  color: ${(props) => (props.hasError ? "white" : "black")};
   font-size: 1.1rem;
   border: none;
   border-radius: 0.5rem;
@@ -94,12 +101,14 @@ const DimensionInput = styled.input`
   font-weight: 600;
   text-align: center;
   margin-left: 0.35rem;
+
   &:focus {
     box-shadow: 0 0 0 0.125rem #fc2323;
   }
   &:first-of-type {
     margin-right: 0.7rem;
   }
+  transition: background 0.2s ease-in-out;
 `;
 
 const ToggleBtn = styled.button`

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Patterns = ({
@@ -19,8 +19,8 @@ const Patterns = ({
     },
     {
       pattern: [
-        [1, 0],
-        [1, 1],
+        [1, 0, 1],
+        [1, 1, 0],
       ],
       name: "Square",
     },
@@ -42,41 +42,42 @@ const Patterns = ({
 );
 
 const Container = styled.div`
+  flex: 1;
   overflow-y: auto;
-  display: flex;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const ShapeContainer = styled.div`
+  cursor: pointer;
   background-color: white;
-  padding: 2rem 1.625rem 1rem;
+  padding: 2rem 1.65rem 1rem;
   box-shadow: 0px 4px 0px #aeaeae;
   border-radius: 1.25rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin: .5rem;
+  height: 10rem;
 `;
 
 const Shape = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => `repeat(${props.cols}, 1.6rem)`};
-  grid-template-rows: ${(props) => `repeat(${props.rows}, 1.6rem)`};
+  grid-template-columns: ${(props) => `repeat(${props.cols}, 1fr)`};
+  grid-template-rows: ${(props) => `repeat(${props.rows}, 1fr)`};
   grid-row-gap: 0.3rem;
   grid-column-gap: 0.3rem;
-
-  justify-items: center;
-  align-items: center;
-  margin: auto;
+  height: ${({cols, rows}) => Math.min(rows/cols, 1) * 4.5}rem;
+  width: ${({cols, rows}) => Math.min(cols/rows, 1) * 4.5}rem;
   margin-bottom: 1.5rem; 
 `;
 
 const Cell = styled.div`
   background-color: ${(props) => (props.colored ? "#DADADA" : "none")};
-  height: 1.6rem;
-  width: 1.6rem;
+  height: 100%;
+  width: 100%;
   border-radius: 0.3rem;
 `;
 

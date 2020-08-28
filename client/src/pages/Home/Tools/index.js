@@ -9,8 +9,7 @@ import ToolsNav from "./ToolsNav";
 const windowEnum = { patterns: "patterns", history: "history" };
 
 const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
-  const [window, setWindow] = useState(windowEnum.patterns);
-
+  const [window, setWindow] = useState(windowEnum.history);
   return (
     <Wrapper>
       <ToolsNav window={window} setWindow={setWindow} windowEnum={windowEnum} />

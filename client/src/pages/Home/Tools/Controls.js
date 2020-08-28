@@ -36,7 +36,6 @@ const Controls = ({
               hasError={!!errors.x}
               ref={register({ required: true, validate: dimensionValidation })}
             />
-            {console.log(errors)}
             <label>y:</label>
             <DimensionInput
               name="y"

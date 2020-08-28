@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     // TODO: Auth
     request();
-  }, [])
+  }, [request])
 
   return (
     <AuthContext.Provider value={{ login, logout, userId }}>

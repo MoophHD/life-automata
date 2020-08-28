@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-const ToolsNav = ({ setWindow, window, windowEnum }) => {
-  return (
+const ToolsNav = ({ setWindow, window, windowEnum }) => (
     <Container>
       <NavItem
         onClick={() => setWindow(windowEnum.patterns)}
-        selected={window == windowEnum.patterns}
+        selected={window === windowEnum.patterns}
       >
-        <ItemTitle selected={window == windowEnum.patterns}>patterns</ItemTitle>
+        <ItemTitle selected={window === windowEnum.patterns}>patterns</ItemTitle>
       </NavItem>
       <NavItem
         onClick={() => setWindow(windowEnum.history)}
-        selected={window == windowEnum.history}
+        selected={window === windowEnum.history}
       >
-        <ItemTitle selected={window == windowEnum.history}>history</ItemTitle>
+        <ItemTitle selected={window === windowEnum.history}>history</ItemTitle>
       </NavItem>
     </Container>
-  );
-};
+);
 
 const Container = styled.ul`
   list-style-type: none;

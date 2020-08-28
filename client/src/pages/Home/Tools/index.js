@@ -14,7 +14,7 @@ const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
     <Wrapper>
       <ToolsNav window={window} setWindow={setWindow} windowEnum={windowEnum} />
       <Container>
-        {window == windowEnum.patterns ? <Patterns /> : <History />}
+        {window === windowEnum.patterns ? <Patterns /> : <History />}
         <LifeNav
           onStepOut={onStepOut}
           onStepIn={onStepIn}

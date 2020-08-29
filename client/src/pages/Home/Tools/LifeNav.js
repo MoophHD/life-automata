@@ -6,11 +6,11 @@ import PlayBtn from "./PlayBtn";
 const LifeNav = ({ onStepOut, onStepIn, onTogglePlay }) => {
   return (
     <Container>
-      <StepBtn>
+      <StepBtn onClick={onStepOut}>
         <StepOutIcon />
       </StepBtn>
       <PlayBtn onTogglePlay={onTogglePlay} />
-      <StepBtn>
+      <StepBtn onClick={onStepIn}>
         <StepInIcon />
       </StepBtn>
     </Container>

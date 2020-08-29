@@ -1,25 +1,19 @@
 import React, { useRef, useEffect, useCallback } from "react";
 
-const testGrid = [
-  [1, 1, 0, 1],
-  [0, 1, 0, 1],
-  [0, 1, 1, 1],
-  [0, 1, 0, 1],
-];
-
 function Grid({ grid, space = 6, height = 600, width = 600 }) {
   const canvasRef = useRef(null);
-  grid = testGrid;
 
   const draw = useCallback(
     (ctx) => {
+      ctx.clearRect(0, 0, width, height);
+
       const cols = grid[0].length;
       const rows = grid.length;
       const celSide = (width - space * (cols - 1)) / cols;
 
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-          ctx.fillStyle = testGrid[i][j] ? "#FC2323" : "#DADADA";
+          ctx.fillStyle = grid[i][j] ? "#FC2323" : "#DADADA";
           roundRect(
             ctx,
             j * celSide + j * space,

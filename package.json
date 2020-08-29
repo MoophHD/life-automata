@@ -26,6 +26,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "immer": "^7.0.8",
     "mongoose": "^5.9.27",
     "passport": "^0.4.1",
     "passport-github2": "^0.1.12",

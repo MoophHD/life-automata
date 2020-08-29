@@ -1,14 +1,16 @@
 import React, { useRef, useEffect, useCallback } from "react";
 
-function Grid({ grid, space = 6, height = 600, width = 600 }) {
+function Grid({ grid, space = 6, height = 600, width = 600, onClickCell }) {
+  const cols = grid[0].length;
+  const rows = grid.length;
   const canvasRef = useRef(null);
 
   const draw = useCallback(
     (ctx) => {
       ctx.clearRect(0, 0, width, height);
 
-      const cols = grid[0].length;
-      const rows = grid.length;
+      // const cols = grid[0].length;
+      // const rows = grid.length;
       const celSide = (width - space * (cols - 1)) / cols;
 
       for (let i = 0; i < rows; i++) {
@@ -43,12 +45,15 @@ function Grid({ grid, space = 6, height = 600, width = 600 }) {
   }, [draw, height, width]);
 
   const handleClick = (e) => {
-    var rect = canvasRef.current.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    console.log(`x: ${x}, y: ${y}`)
-  }
+    const { width, height } = rect;
+    const row = ~~((x / width) * cols);
+    const col = ~~((y / height) * rows);
+    onClickCell(col, row);
+  };
 
   return (
     <canvas

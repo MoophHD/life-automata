@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Grid from "../../../components/Grid";
 
-function PlayArea({ grid, running, options }) {
+function PlayArea({ grid, running, options, onToggleCell}) {
   useEffect(() => {}, [running, options]);
   return (
     <Container>
-      <Grid running={running} options={options} grid={grid} />
+      <Grid onClickCell={onToggleCell} running={running} options={options} grid={grid} />
     </Container>
   );
 }

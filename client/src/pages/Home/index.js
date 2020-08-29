@@ -57,7 +57,6 @@ function Home() {
   const onToggleCell = (x, y) => {
     dispatch({ type: "toggle-cell", payload: { x, y } });
   };
-  // onToggleCell(0,0);
   return (
     <Container>
       <PlayArea
@@ -65,6 +64,7 @@ function Home() {
         grid={state.grid}
         running={running}
         options={options}
+        onToggleCell={onToggleCell}
       />
       <Tools
         onStepIn={onStepIn}

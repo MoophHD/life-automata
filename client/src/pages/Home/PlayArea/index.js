@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Grid from "../../../components/Grid";
+import NavBar from "../../../components/NavBar";
 
 function PlayArea({ grid, running, options, onToggleCell }) {
   const containerRef = useRef(null);
@@ -30,26 +31,35 @@ function PlayArea({ grid, running, options, onToggleCell }) {
     updateFreeRect();
     window.addEventListener("resize", updateFreeRect);
 
-    return () => window.removeEventListener("resize", updateFreeRect) 
+    return () => window.removeEventListener("resize", updateFreeRect);
   }, [containerRef]);
 
   return (
-    <Container ref={containerRef}>
-      <Grid
-        style={{display: gridVisible ? "block" : "none"}}
-        freeHeight={freeRect.height}
-        freeWidth={freeRect.width}
-        onClickCell={onToggleCell}
-        running={running}
-        options={options}
-        grid={grid}
-      />
+    <Container>
+      <NavBar />
+      <GridWrapper ref={containerRef}>
+        <Grid
+          style={{ display: gridVisible ? "block" : "none" }}
+          freeHeight={freeRect.height}
+          freeWidth={freeRect.width}
+          onClickCell={onToggleCell}
+          running={running}
+          options={options}
+          grid={grid}
+        />
+      </GridWrapper>
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+`
+
+const GridWrapper = styled.div`
+  display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
   padding: 3.75rem 6rem;

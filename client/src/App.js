@@ -3,7 +3,10 @@ import { useHttp } from "./hooks/http.hook";
 import { useAuth } from "./hooks/auth.hook";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthContext from "./context/auth.context";
-import Home from './pages/Home';
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import NavBar from "./components/NavBar";
+import LangContext from "./context/lang.context";
 
 function App() {
   const { login, logout, userId } = useAuth();
@@ -12,17 +15,22 @@ function App() {
   useEffect(() => {
     // TODO: Auth
     request();
-  }, [request])
+  }, [request]);
 
   return (
     <AuthContext.Provider value={{ login, logout, userId }}>
-      <Router>
-        <Switch>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
+      <LangContext.Provider>
+        <Router>
+          <Switch>
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </Router>
+      </LangContext.Provider>
     </AuthContext.Provider>
   );
 }

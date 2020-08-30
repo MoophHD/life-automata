@@ -1,27 +1,38 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 
-function Grid({ grid, space = 6, height = 600, width = 600, onClickCell }) {
+function Grid({ grid, space = 4, freeHeight, freeWidth, onClickCell, style }) {
+  const canvasRef = useRef(null);
   const cols = grid[0].length;
   const rows = grid.length;
-  const canvasRef = useRef(null);
+  const [height, setHeight] = useState(freeHeight);
+  const [width, setWidth] = useState(freeWidth);
+
+  useEffect(() => {
+    if (freeWidth / cols >= freeHeight / rows) {
+      setHeight(freeHeight);
+      setWidth((cols / rows) * freeHeight - space);
+    } else {
+      setWidth(freeWidth);
+      setHeight((rows / cols) * freeWidth - space);
+    }
+  }, [freeHeight, freeWidth]);
 
   const draw = useCallback(
     (ctx) => {
       ctx.clearRect(0, 0, width, height);
 
-      // const cols = grid[0].length;
-      // const rows = grid.length;
-      const celSide = (width - space * (cols - 1)) / cols;
+      const cellSide = (width - space * (cols - 1)) / cols;
+      console.log(`cellSide ${cellSide}`)
 
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
           ctx.fillStyle = grid[i][j] ? "#FC2323" : "#DADADA";
           roundRect(
             ctx,
-            j * celSide + j * space,
-            i * celSide + i * space,
-            celSide,
-            celSide,
+            j * cellSide + j * space,
+            i * cellSide + i * space,
+            cellSide,
+            cellSide,
             5,
             false,
             false
@@ -38,7 +49,6 @@ function Grid({ grid, space = 6, height = 600, width = 600, onClickCell }) {
     const context = canvas.getContext("2d");
 
     context.fillStyle = "transparent";
-    // context.fillRect(0, 0, context.canvas.width, context.canvas.height)
     context.fillRect(0, 0, width, height);
 
     draw(context);
@@ -57,10 +67,10 @@ function Grid({ grid, space = 6, height = 600, width = 600, onClickCell }) {
 
   return (
     <canvas
-      onClick={handleClick}
-      width={width}
+      style={{cursor: 'pointer', ...style}}
       height={height}
-      styled={{ height: height, width: width }}
+      width={width}
+      onClick={handleClick}
       ref={canvasRef}
     ></canvas>
   );

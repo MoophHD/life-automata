@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import LangContext from "../../context/lang.context";
+// import LangContext from "../../context/lang.context";
 
 const LanguageToggle = ({ isEn }) => (
   <Wrapper>

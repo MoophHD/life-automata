@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AuthContext from "./context/auth.context";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import NavBar from "./components/NavBar";
 import LangContext from "./context/lang.context";
 
 function App() {

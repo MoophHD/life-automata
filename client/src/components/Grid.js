@@ -15,14 +15,13 @@ function Grid({ grid, space = 4, freeHeight, freeWidth, onClickCell, style }) {
       setWidth(freeWidth);
       setHeight((rows / cols) * freeWidth - space);
     }
-  }, [freeHeight, freeWidth]);
+  }, [freeHeight, freeWidth, cols, rows, space]);
 
   const draw = useCallback(
     (ctx) => {
       ctx.clearRect(0, 0, width, height);
 
       const cellSide = (width - space * (cols - 1)) / cols;
-      console.log(`cellSide ${cellSide}`)
 
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
@@ -41,7 +40,7 @@ function Grid({ grid, space = 4, freeHeight, freeWidth, onClickCell, style }) {
         }
       }
     },
-    [grid, space, width]
+    [grid, space, width, cols, rows, height]
   );
 
   useEffect(() => {

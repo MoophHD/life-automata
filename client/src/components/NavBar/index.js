@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Icon from "../Icon";
-import LanguageToggle from "./LanguageToggle";
 
 const NavBar = ({ style }) => {
   // const [isEn, setIsEn] = useState(true);

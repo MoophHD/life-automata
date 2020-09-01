@@ -34,19 +34,31 @@ function PlayArea({ grid, running, options, onToggleCell }) {
     return () => window.removeEventListener("resize", updateFreeRect);
   }, [containerRef]);
 
+  const handleDrop = (e) => {
+    console.log(`dropped`);
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+
+    console.log(`dragging`);
+  };
+
   return (
     <Container>
       <NavBar />
       <GridWrapper ref={containerRef}>
-        <Grid
-          style={{ display: gridVisible ? "block" : "none" }}
-          freeHeight={freeRect.height}
-          freeWidth={freeRect.width}
-          onClickCell={onToggleCell}
-          running={running}
-          options={options}
-          grid={grid}
-        />
+        <div onDrop={handleDrop} onDragOver={handleDrag}>
+          <Grid
+            style={{ display: gridVisible ? "block" : "none" }}
+            freeHeight={freeRect.height}
+            freeWidth={freeRect.width}
+            onClickCell={onToggleCell}
+            running={running}
+            options={options}
+            grid={grid}
+          />
+        </div>
       </GridWrapper>
     </Container>
   );
@@ -55,7 +67,7 @@ function PlayArea({ grid, running, options, onToggleCell }) {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const GridWrapper = styled.div`
   display: flex;

@@ -2,20 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 const ToolsNav = ({ setWindow, window, windowEnum }) => (
-    <Container>
-      <NavItem
-        onClick={() => setWindow(windowEnum.patterns)}
-        selected={window === windowEnum.patterns}
-      >
-        <ItemTitle selected={window === windowEnum.patterns}>patterns</ItemTitle>
-      </NavItem>
-      <NavItem
-        onClick={() => setWindow(windowEnum.history)}
-        selected={window === windowEnum.history}
-      >
-        <ItemTitle selected={window === windowEnum.history}>history</ItemTitle>
-      </NavItem>
-    </Container>
+  <Container>
+    <NavItem
+      onClick={() => setWindow(windowEnum.history)}
+      selected={window === windowEnum.history}
+    >
+      <ItemTitle selected={window === windowEnum.history}>history</ItemTitle>
+    </NavItem>
+    <NavItem
+      onClick={() => setWindow(windowEnum.patterns)}
+      selected={window === windowEnum.patterns}
+    >
+      <ItemTitle selected={window === windowEnum.patterns}>patterns</ItemTitle>
+    </NavItem>
+  </Container>
 );
 
 const Container = styled.ul`

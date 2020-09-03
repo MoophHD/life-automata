@@ -4,17 +4,57 @@ import Icon from "../../../components/Icon";
 import RangeInput from "../../../components/RangeInput";
 import { useForm } from "react-hook-form";
 
+const WAIT_INTERVAL = 500;
+const ENTER_KEY = 13;
+
 const Controls = ({
-  onControlsChange,
   defaultX = 20,
   defaultY = 20,
   defaultInterval = 1000,
+  onSetCols,
+  onSetRows,
 }) => {
   const [folded, setFolded] = useState(false);
   const { register, errors } = useForm({ mode: "onChange" });
+  let timer = null;
 
   const dimensionValidation = {
     isInteger: (value) => !!parseInt(value),
+  };
+
+  const triggerRowChange = (value) => {
+    onSetRows(value);
+  };
+  const triggerColChange = (value) => {
+    onSetCols(value);
+  };
+
+  const handleRowSubmit = (e) => {
+    clearTimeout(timer);
+    if (errors.y) return;
+
+    const value = parseInt(e.target.value);
+
+    if (e.keyCode && e.keyCode === ENTER_KEY) {
+      triggerRowChange(value);
+      return;
+    }
+
+    timer = setTimeout(() => triggerRowChange(value), WAIT_INTERVAL);
+  };
+
+  const handleColSubmit = (e) => {
+    clearTimeout(timer);
+    if (errors.x) return;
+
+    const value = parseInt(e.target.value);
+
+    if (e.keyCode && e.keyCode === ENTER_KEY) {
+      triggerColChange(value);
+      return;
+    }
+
+    timer = setTimeout(() => triggerColChange(value), WAIT_INTERVAL);
   };
 
   //add hook for all the input stuff
@@ -31,6 +71,8 @@ const Controls = ({
           <InputWrapper>
             <label>x:</label>
             <DimensionInput
+              onChange={handleColSubmit}
+              onKeyDown={handleColSubmit}
               name="x"
               defaultValue={defaultX}
               hasError={!!errors.x}
@@ -38,6 +80,8 @@ const Controls = ({
             />
             <label>y:</label>
             <DimensionInput
+              onChange={handleRowSubmit}
+              onKeyDown={handleRowSubmit}
               name="y"
               defaultValue={defaultY}
               hasError={!!errors.y}

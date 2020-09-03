@@ -8,7 +8,7 @@ import ToolsNav from "./ToolsNav";
 
 const windowEnum = { patterns: "patterns", history: "history" };
 
-const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
+const Tools = ({ onStepIn, onStepOut, onTogglePlay, onSetCols, onSetRows }) => {
   const [window, setWindow] = useState(windowEnum.patterns);
   return (
     <Wrapper>
@@ -20,7 +20,7 @@ const Tools = ({ onStepIn, onStepOut, onTogglePlay }) => {
           onStepIn={onStepIn}
           onTogglePlay={onTogglePlay}
         />
-        <Controls />
+        <Controls onSetCols={onSetCols} onSetRows={onSetRows} />
       </Container>
     </Wrapper>
   );

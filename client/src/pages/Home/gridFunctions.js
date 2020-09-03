@@ -20,7 +20,7 @@ const countNeighbors = (grid, x, y, numRows, numCols) => {
   }, 0);
 };
 
-const getNextGrid = (grid) => {
+export const getNextGrid = (grid) => {
   const numRows = grid.length;
   const numCols = grid[0].length;
 
@@ -38,4 +38,6 @@ const getNextGrid = (grid) => {
   });
 };
 
-export default getNextGrid;
+export const generateEmptyGrid = (numRows, numCols) => {
+  return Array.from({length: numRows}).map(() => Array.from({length: numCols}).fill(0));
+}

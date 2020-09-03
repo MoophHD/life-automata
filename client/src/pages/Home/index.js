@@ -3,26 +3,21 @@ import styled from "styled-components";
 import PlayArea from "./PlayArea";
 import Tools from "./Tools";
 import { produce } from "immer";
+import getNextGrid from './getNextGrid';
+
+const generateEmptyGrid = (numRows, numCols) => {
+  return Array.from({length: numRows}).map(() => Array.from({length: numCols}).fill(0));
+}
 
 const initialState = {
-  grid: [
-    [1, 1, 0, 1],
-    [0, 1, 0, 1],
-    [0, 1, 1, 1],
-    [0, 1, 0, 1],
-    [0, 1, 0, 1],
-    [0, 1, 0, 1],
-    [0, 1, 0, 1],
-    [0, 1, 0, 1],
-    [0, 1, 0, 1],
-    [0, 1, 0, 1],
-  ],
+  grid: generateEmptyGrid(20, 20),
   step: 0,
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case "toggle-cell":
+      console.log(`toggling`);
       const { grid } = state;
       const { x, y } = action.payload;
       return {
@@ -32,22 +27,22 @@ function reducer(state, action) {
         }),
       };
     case "step-in":
-      return { ...state, step: state.step + 1 };
+      return { ...state, grid: getNextGrid(state.grid), step: state.step + 1 };
     case "step-out":
-      return { ...state, ste: state.step - 1 };
+      return { ...state, step: state.step - 1 };
     default:
       return state;
   }
 }
 
-const Home = ({navbar}) => {
+const Home = ({ navbar }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  console.log(state.grid);
   const [running, setRunning] = useState(false);
   const [options, setOptions] = useState({ x: 50, y: 50, interval: 1000 });
 
   useEffect(() => {
     // TODO: Fetch grid from db
-    onToggleCell(0, 0);
   }, []);
 
   const onStepIn = () => {
@@ -78,7 +73,7 @@ const Home = ({navbar}) => {
       />
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   display: grid;

@@ -10,9 +10,10 @@ const ENTER_KEY = 13;
 const Controls = ({
   defaultX = 20,
   defaultY = 20,
-  defaultInterval = 1000,
   onSetCols,
   onSetRows,
+  onSetInterval,
+  interval,
 }) => {
   const [folded, setFolded] = useState(false);
   const { register, errors } = useForm({ mode: "onChange" });
@@ -57,7 +58,11 @@ const Controls = ({
     timer = setTimeout(() => triggerColChange(value), WAIT_INTERVAL);
   };
 
-  //add hook for all the input stuff
+  const handleIntervalChange = (e) => {
+    const interval = parseInt(e.target.value);
+    onSetInterval(interval);
+  }
+
   return (
     <>
       {folded ? (
@@ -96,7 +101,8 @@ const Controls = ({
               min={50}
               max={950}
               step={100}
-              defaultValue={defaultInterval}
+              onChange={handleIntervalChange}
+              value={interval}
               register={register}
             />
           </InputWrapper>

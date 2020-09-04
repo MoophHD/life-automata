@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Icon from "../../../components/Icon";
 
-const PlayBtn = ({ onTogglePlay }) => {
-  const [playing, setPlaying] = useState(false);
+const PlayBtn = ({ running, onTogglePlay }) => {
   return (
     <Container
       onClick={() => {
-        setPlaying(!playing);
         onTogglePlay();
       }}
     >
-      {playing ? <PlayIcon /> : <StopIcon />}
+      {running ? <StopIcon /> : <PlayIcon />}
     </Container>
   );
 };

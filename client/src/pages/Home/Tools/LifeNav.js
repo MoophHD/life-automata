@@ -3,13 +3,13 @@ import styled from "styled-components";
 import Icon from "../../../components/Icon";
 import PlayBtn from "./PlayBtn";
 
-const LifeNav = ({ onStepOut, onStepIn, onTogglePlay }) => {
+const LifeNav = ({ running, onStepOut, onStepIn, onTogglePlay }) => {
   return (
     <Container>
       <StepBtn onClick={onStepOut}>
         <StepOutIcon />
       </StepBtn>
-      <PlayBtn onTogglePlay={onTogglePlay} />
+      <PlayBtn running={running} onTogglePlay={onTogglePlay} />
       <StepBtn onClick={onStepIn}>
         <StepInIcon />
       </StepBtn>

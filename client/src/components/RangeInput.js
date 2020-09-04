@@ -8,13 +8,13 @@ const borderSize = 0.3; //rem
 //input
 const inputSidePart = 0.4; //rem
 
-const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
+const RangeInput = ({ style, min, max, step, value, register, interval, onChange }) => {
   const count = ~~(max - min) / step + 1;
   return (
     <Container>
       <RulerWrapper count={count}>
         {/* TODO: Add stumps */}
-        <Ruler stumps={{ 1: { text: "t" }, 3: { text: "b" } }} count={count} />
+        <Ruler stumps={{ 0: { text: "1/s" },3:{text: "1.5/s"}, 6:{text:"3/s"}, 9: { text: "20/s" } }} count={count} />
       </RulerWrapper>
 
       <Input
@@ -24,7 +24,8 @@ const RangeInput = ({ style, min, max, step, defaultValue, register }) => {
         min={min}
         max={max}
         step={step}
-        defaultValue={defaultValue}
+        value={value}
+        onChange={onChange}
         ref={register}
       />
     </Container>

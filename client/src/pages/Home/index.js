@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useCallback,
+  useRef,
+} from "react";
 import styled from "styled-components";
 import PlayArea from "./PlayArea";
 import Tools from "./Tools";
@@ -10,6 +16,7 @@ const initialState = {
   step: 0,
   rows: 20,
   cols: 20,
+  interval: 950,
 };
 
 function reducer(state, action) {
@@ -41,6 +48,11 @@ function reducer(state, action) {
         grid: generateEmptyGrid(state.rows, newCols),
         cols: newCols,
       };
+    case "set-interval":
+      return {
+        ...state,
+        interval: action.payload,
+      };
     default:
       return state;
   }
@@ -49,7 +61,14 @@ function reducer(state, action) {
 const Home = ({ navbar }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [running, setRunning] = useState(false);
-  const [options, setOptions] = useState({ x: 50, y: 50, interval: 1000 });
+
+  const { grid, rows, cols, interval } = state;
+
+  const runningRef = useRef(running);
+  runningRef.current = running;
+
+  const intervalRef = useRef(interval);
+  intervalRef.current = interval;
 
   useEffect(() => {
     // TODO: Fetch grid from db
@@ -72,8 +91,27 @@ const Home = ({ navbar }) => {
   };
 
   const onSetCols = (cols) => {
-    console.log(`set cols ${cols}`)
     dispatch({ type: "set-cols", payload: cols });
+  };
+
+  const onSetInterval = (interval) => {
+    console.log(interval);
+    dispatch({ type: "set-interval", payload: interval });
+  };
+
+  const runSimulation = useCallback(() => {
+    if (!runningRef.current) return;
+
+    onStepIn();
+
+    setTimeout(runSimulation, intervalRef.current);
+  }, []);
+
+  const toggleRunning = () => {
+    setRunning(!running);
+    runningRef.current = !running;
+
+    runSimulation();
   };
 
   return (
@@ -82,7 +120,6 @@ const Home = ({ navbar }) => {
         step={state.step}
         grid={state.grid}
         running={running}
-        options={options}
         onToggleCell={onToggleCell}
       />
       <Tools
@@ -90,8 +127,10 @@ const Home = ({ navbar }) => {
         onSetCols={onSetCols}
         onStepIn={onStepIn}
         onStepOut={onStepOut}
-        onTogglePlay={() => setRunning(!running)}
-        setOptions={setOptions}
+        onSetInterval={onSetInterval}
+        interval={interval}
+        running={running}
+        onTogglePlay={toggleRunning}
       />
     </Container>
   );

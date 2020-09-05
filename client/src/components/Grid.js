@@ -1,6 +1,20 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { DropTarget } from "react-dnd";
 
-function Grid({ grid, space = 4, freeHeight, freeWidth, onClickCell, style }) {
+const Grid = ({
+  grid,
+  space = 4,
+  freeHeight,
+  freeWidth,
+  onClickCell,
+  style,
+  setCellSide,
+  connectDropTarget,
+  isOver,
+  canDrop,
+}) => {
+  // console.log(`isOver? ${isOver}`);
+  // console.log(`canDrop ${canDrop}`);
   const canvasRef = useRef(null);
   const cols = grid[0].length;
   const rows = grid.length;
@@ -22,6 +36,7 @@ function Grid({ grid, space = 4, freeHeight, freeWidth, onClickCell, style }) {
       ctx.clearRect(0, 0, width, height);
 
       const cellSide = (width - space * (cols - 1)) / cols;
+      setCellSide(cellSide);
 
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
@@ -65,15 +80,29 @@ function Grid({ grid, space = 4, freeHeight, freeWidth, onClickCell, style }) {
   };
 
   return (
-    <canvas
-      style={{cursor: 'pointer', ...style}}
-      height={height}
-      width={width}
-      onClick={handleClick}
-      ref={canvasRef}
-    ></canvas>
+    <div ref={connectDropTarget}>
+      <canvas
+        style={{ cursor: "pointer", ...style }}
+        height={height}
+        width={width}
+        onClick={handleClick}
+        ref={canvasRef}
+      ></canvas>
+    </div>
   );
-}
+};
+
+export default DropTarget(
+  "Pattern",
+  {
+    drop: () => ({ name: "Dustbin" }),
+  },
+  (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+  })
+)(Grid);
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (typeof stroke === "undefined") {
@@ -113,5 +142,3 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     ctx.stroke();
   }
 }
-
-export default Grid;

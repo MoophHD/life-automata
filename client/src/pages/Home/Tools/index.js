@@ -16,14 +16,19 @@ const Tools = ({
   onSetRows,
   onSetInterval,
   interval,
-  running
+  running,
+  cellSide,
 }) => {
   const [window, setWindow] = useState(windowEnum.patterns);
   return (
     <Wrapper>
       <ToolsNav window={window} setWindow={setWindow} windowEnum={windowEnum} />
       <Container>
-        {window === windowEnum.patterns ? <Patterns /> : <History />}
+        {window === windowEnum.patterns ? (
+          <Patterns cellSide={cellSide} />
+        ) : (
+          <History />
+        )}
         <LifeNav
           running={running}
           onStepOut={onStepOut}

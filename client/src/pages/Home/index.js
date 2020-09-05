@@ -10,6 +10,8 @@ import PlayArea from "./PlayArea";
 import Tools from "./Tools";
 import { produce } from "immer";
 import { getNextGrid, generateEmptyGrid } from "./gridFunctions";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 const initialState = {
   grid: generateEmptyGrid(20, 20),
@@ -61,6 +63,8 @@ function reducer(state, action) {
 const Home = ({ navbar }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [running, setRunning] = useState(false);
+  //lord forgive me
+  const [cellSide, setCellSide] = useState(10);
 
   const { grid, rows, cols, interval } = state;
 
@@ -115,24 +119,28 @@ const Home = ({ navbar }) => {
   };
 
   return (
-    <Container>
-      <PlayArea
-        step={state.step}
-        grid={state.grid}
-        running={running}
-        onToggleCell={onToggleCell}
-      />
-      <Tools
-        onSetRows={onSetRows}
-        onSetCols={onSetCols}
-        onStepIn={onStepIn}
-        onStepOut={onStepOut}
-        onSetInterval={onSetInterval}
-        interval={interval}
-        running={running}
-        onTogglePlay={toggleRunning}
-      />
-    </Container>
+    <DndProvider backend={HTML5Backend}>
+      <Container>
+        <PlayArea
+          step={state.step}
+          grid={state.grid}
+          running={running}
+          setCellSide={(cellSide) => setCellSide(cellSide)}
+          onToggleCell={onToggleCell}
+        />
+        <Tools
+          onSetRows={onSetRows}
+          onSetCols={onSetCols}
+          onStepIn={onStepIn}
+          onStepOut={onStepOut}
+          onSetInterval={onSetInterval}
+          interval={interval}
+          running={running}
+          onTogglePlay={toggleRunning}
+          cellSide={cellSide}
+        />
+      </Container>
+    </DndProvider>
   );
 };
 

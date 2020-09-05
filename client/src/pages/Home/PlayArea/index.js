@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Grid from "../../../components/Grid";
 import NavBar from "../../../components/NavBar";
 
-function PlayArea({ grid, running, options, onToggleCell }) {
+function PlayArea({ grid, running, options, onToggleCell, setCellSide }) {
   const containerRef = useRef(null);
   const [freeRect, setFreeRect] = useState({ width: 0, height: 0 });
   const [gridVisible, setGridVisible] = useState(true);
@@ -34,31 +34,30 @@ function PlayArea({ grid, running, options, onToggleCell }) {
     return () => window.removeEventListener("resize", updateFreeRect);
   }, [containerRef]);
 
-  const handleDrop = (e) => {
-    console.log(`dropped`);
-  };
+  // const handleDrop = (e) => {
+  //   console.log(`dropped`);
+  // };
 
-  const handleDrag = (e) => {
-    e.preventDefault();
+  // const handleDrag = (e) => {
+  //   e.preventDefault();
 
-    console.log(`dragging`);
-  };
+  //   console.log(`dragging`);
+  // };
 
   return (
     <Container>
       <NavBar />
       <GridWrapper ref={containerRef}>
-        <div onDrop={handleDrop} onDragOver={handleDrag}>
-          <Grid
-            style={{ display: gridVisible ? "block" : "none" }}
-            freeHeight={freeRect.height}
-            freeWidth={freeRect.width}
-            onClickCell={onToggleCell}
-            running={running}
-            options={options}
-            grid={grid}
-          />
-        </div>
+        <Grid
+          style={{ display: gridVisible ? "block" : "none" }}
+          freeHeight={freeRect.height}
+          freeWidth={freeRect.width}
+          onClickCell={onToggleCell}
+          running={running}
+          options={options}
+          grid={grid}
+          setCellSide={setCellSide}
+        />
       </GridWrapper>
     </Container>
   );

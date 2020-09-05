@@ -5,20 +5,7 @@ import PatternShape from "./PatternShape";
 const Patterns = ({
   cellSide,
   patterns = [
-    {
-      pattern: [
-        [1, 0],
-        [1, 1],
-      ],
-      name: "Square",
-    },
-    {
-      pattern: [
-        [1, 0],
-        [1, 1],
-      ],
-      name: "Square",
-    },
+
     {
       pattern: [
         [1, 0, 1],
@@ -28,9 +15,6 @@ const Patterns = ({
     },
   ],
 }) => {
-  const handleDragStart = (e, i) => {
-    e.dataTransfer.setData("pattern", JSON.stringify(patterns[i].pattern));
-  };
 
   return (
     <Container>

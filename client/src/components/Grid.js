@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { DropTarget } from "react-dnd";
+import { useDrop } from "react-dnd";
 
 const Grid = ({
   grid,
@@ -9,12 +9,30 @@ const Grid = ({
   onClickCell,
   style,
   setCellSide,
+  onPutPattern,
   connectDropTarget,
-  isOver,
-  canDrop,
 }) => {
-  // console.log(`isOver? ${isOver}`);
-  // console.log(`canDrop ${canDrop}`);
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: "Pattern",
+    drop: (item, monitor) => {
+      const { pattern } = item;
+      // const pickOffset = item.pickOffset;
+      const pickOffset = { x: 0, y: 0 };
+
+      const offset = monitor.getClientOffset();
+
+      const { x, y } = canvasRef.current.getBoundingClientRect();
+
+      const position = {
+        x: offset.x - x - pickOffset.x,
+        y: offset.y - y - pickOffset.y,
+      };
+
+      const { col, row } = getCoords(position.x, position.y);
+      onPutPattern(row, col, pattern);
+    },
+  });
+
   const canvasRef = useRef(null);
   const cols = grid[0].length;
   const rows = grid.length;
@@ -73,14 +91,21 @@ const Grid = ({
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const { width, height } = rect;
-    const row = ~~((x / width) * cols);
-    const col = ~~((y / height) * rows);
+    const { col, row } = getCoords(x, y);
     onClickCell(col, row);
   };
 
+  const getCoords = (x, y) => {
+    const rect = canvasRef.current.getBoundingClientRect();
+    const { width, height } = rect;
+    const row = ~~((x / width) * cols);
+    const col = ~~((y / height) * rows);
+
+    return { col, row };
+  };
+
   return (
-    <div ref={connectDropTarget}>
+    <div ref={drop}>
       <canvas
         style={{ cursor: "pointer", ...style }}
         height={height}
@@ -92,17 +117,19 @@ const Grid = ({
   );
 };
 
-export default DropTarget(
-  "Pattern",
-  {
-    drop: () => ({ name: "Dustbin" }),
-  },
-  (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-  })
-)(Grid);
+// export default DropTarget(
+//   "Pattern",
+//   {
+//     drop: () => ({ name: "Dustbin" }),
+//   },
+//   (connect, monitor) => ({
+//     connectDropTarget: connect.dropTarget(),
+//     isOver: monitor.isOver(),
+//     canDrop: monitor.canDrop(),
+//   })
+// )(Grid);
+
+export default Grid;
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (typeof stroke === "undefined") {

@@ -3,7 +3,14 @@ import styled from "styled-components";
 import Grid from "../../../components/Grid";
 import NavBar from "../../../components/NavBar";
 
-function PlayArea({ grid, running, options, onToggleCell, setCellSide }) {
+function PlayArea({
+  grid,
+  running,
+  options,
+  onToggleCell,
+  setCellSide,
+  onPutPattern,
+}) {
   const containerRef = useRef(null);
   const [freeRect, setFreeRect] = useState({ width: 0, height: 0 });
   const [gridVisible, setGridVisible] = useState(true);
@@ -57,6 +64,7 @@ function PlayArea({ grid, running, options, onToggleCell, setCellSide }) {
           options={options}
           grid={grid}
           setCellSide={setCellSide}
+          onPutPattern={onPutPattern}
         />
       </GridWrapper>
     </Container>

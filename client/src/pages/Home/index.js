@@ -18,13 +18,14 @@ const initialState = {
   step: 0,
   rows: 20,
   cols: 20,
-  interval: 950,
+  interval: 650,
 };
 
 function reducer(state, action) {
+  const { grid } = state;
+
   switch (action.type) {
-    case "toggle-cell":
-      const { grid } = state;
+    case "toggle-cell": {
       const { x, y } = action.payload;
       return {
         ...state,
@@ -32,6 +33,7 @@ function reducer(state, action) {
           gridCopy[x][y] = gridCopy[x][y] === 1 ? 0 : 1;
         }),
       };
+    }
     case "step-in":
       return { ...state, grid: getNextGrid(state.grid), step: state.step + 1 };
     case "step-out":
@@ -55,6 +57,28 @@ function reducer(state, action) {
         ...state,
         interval: action.payload,
       };
+    case "put-pattern": {
+      let { x, y, pattern } = action.payload;
+      const patternWidth = pattern[0].length;
+      const patternHeight = pattern.length;
+      return {
+        ...state,
+        grid: produce(grid, (gridCopy) => {
+          gridCopy.forEach((row, i) => {
+            row.forEach((col, j) => {
+              if (
+                i >= y &&
+                i < y + patternHeight &&
+                j >= x &&
+                j < x + patternWidth
+              ) {
+                if (pattern[i-y][j-x] === 1) gridCopy[i][j] = 1;
+              }
+            });
+          });
+        }),
+      };
+    }
     default:
       return state;
   }
@@ -118,6 +142,10 @@ const Home = ({ navbar }) => {
     runSimulation();
   };
 
+  const onPutPattern = (x, y, pattern) => {
+    dispatch({ type: "put-pattern", payload: { x, y, pattern } });
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Container>
@@ -125,6 +153,7 @@ const Home = ({ navbar }) => {
           step={state.step}
           grid={state.grid}
           running={running}
+          onPutPattern={onPutPattern}
           setCellSide={(cellSide) => setCellSide(cellSide)}
           onToggleCell={onToggleCell}
         />

@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-// { date: new window.Date().toISOString(), step: 1 },
-// { date: new window.Date().toISOString(), step: 2 },
-// { date: new window.Date().toISOString(), step: 3 },
-
-const History = ({dates=[], onItemClick}) => (
+const History = ({ history, onSetFromHistory, activeStep }) => (
   <Container>
-    {dates.map((date, i) => (
-      <Item onClick={() => onItemClick()} key={`dateline ${date.step}th`}>
-        <Step>step №{date.step}</Step>
-        <Date>{date.date}</Date>
+    {history.map((historyItem, i) => (
+      <Item
+        active={historyItem.step === activeStep}
+        onClick={() => onSetFromHistory(historyItem.step)}
+        key={`dateline ${historyItem.step}th`}
+      >
+        <Step>step №{historyItem.step}</Step>
+        <Date>{historyItem.date}</Date>
       </Item>
     ))}
   </Container>
@@ -32,6 +32,8 @@ const Item = styled.li`
   padding: 0.5rem 1rem;
   margin-bottom: 0.125rem;
   position: relative;
+  transition: all .15s ease-in;
+  background-color: ${props => props.active ? '#fc2323' : 'transparent'};
 
   &:before {
     content: "";

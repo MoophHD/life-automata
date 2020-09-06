@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { DragPreviewImage, useDrag } from "react-dnd";
 import styled from "styled-components";
 import { useEffect } from "react";
-import { compareSync } from "bcryptjs";
 
 const space = 4;
 const PatternShape = ({ globalCellSide, pattern, name }) => {

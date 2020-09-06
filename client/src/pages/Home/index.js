@@ -13,16 +13,23 @@ import { getNextGrid, generateEmptyGrid } from "./gridFunctions";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
+const MAX_HISTORY_STORAGE = 10;
+/*
+History model:
+{ date: new window.Date().toISOString(), step: 1, grid: `` },
+*/
 const initialState = {
   grid: generateEmptyGrid(20, 20),
   step: 0,
   rows: 20,
   cols: 20,
   interval: 650,
+  // hashes/ids for history?
+  history: [],
 };
 
 function reducer(state, action) {
-  const { grid } = state;
+  const { grid, step, history } = state;
 
   switch (action.type) {
     case "toggle-cell": {
@@ -34,10 +41,59 @@ function reducer(state, action) {
         }),
       };
     }
-    case "step-in":
-      return { ...state, grid: getNextGrid(state.grid), step: state.step + 1 };
-    case "step-out":
-      return { ...state, step: state.step - 1 };
+    case "set-from-history": {
+      const { step } = action.payload;
+      const historyElement = history.find((el) => el.step === step);
+
+      if (history) {
+        return { ...state, step, grid: JSON.parse(historyElement.grid) };
+      } else {
+        return state;
+      }
+    }
+    case "step-in": {
+      const nextStep = step + 1;
+      console.log(`next Step ${nextStep}`);
+      let nextStepHistory = history.find((el) => el.step === nextStep);
+      console.log(nextStepHistory);
+      if (nextStepHistory) {
+        console.log(`next step found`);
+        // grab already existing grid
+        return {
+          ...state,
+          grid: JSON.parse(nextStepHistory.grid),
+          step: nextStep,
+        };
+      } else {
+        let nextGrid = getNextGrid(grid);
+        let nextHistory = produce(history, (historyCopy) => {
+          // replace with shift/unshift when the internet is up
+          if (historyCopy.length >= MAX_HISTORY_STORAGE) historyCopy.shift();
+          historyCopy.push({
+            date: new window.Date().toISOString(),
+            grid: JSON.stringify(grid),
+            step: nextStep,
+          });
+        });
+
+        return {
+          ...state,
+          grid: nextGrid,
+          step: nextStep,
+          history: nextHistory,
+        };
+      }
+    }
+    case "step-out": {
+      const prevStep = step - 1;
+
+      if (prevStep < 0) return state;
+
+      const prevHistory = history.find((el) => el.step === prevStep);
+      const prevGrid = JSON.parse(prevHistory.grid);
+
+      return { ...state, step: prevStep, grid: prevGrid };
+    }
     case "set-rows":
       const newRows = action.payload;
       return {
@@ -72,7 +128,7 @@ function reducer(state, action) {
                 j >= x &&
                 j < x + patternWidth
               ) {
-                if (pattern[i-y][j-x] === 1) gridCopy[i][j] = 1;
+                if (pattern[i - y][j - x] === 1) gridCopy[i][j] = 1;
               }
             });
           });
@@ -90,7 +146,7 @@ const Home = ({ navbar }) => {
   //lord forgive me
   const [cellSide, setCellSide] = useState(10);
 
-  const { interval } = state;
+  const { interval, history, step, grid } = state;
 
   const runningRef = useRef(running);
   runningRef.current = running;
@@ -145,18 +201,25 @@ const Home = ({ navbar }) => {
     dispatch({ type: "put-pattern", payload: { x, y, pattern } });
   };
 
+  const onSetFromHistory = (step) => {
+    dispatch({ type: "set-from-history", payload: { step } });
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Container>
         <PlayArea
-          step={state.step}
-          grid={state.grid}
+          step={step}
+          grid={grid}
           running={running}
           onPutPattern={onPutPattern}
           setCellSide={(cellSide) => setCellSide(cellSide)}
           onToggleCell={onToggleCell}
         />
         <Tools
+          step={step}
+          history={history}
+          onSetFromHistory={onSetFromHistory}
           onSetRows={onSetRows}
           onSetCols={onSetCols}
           onStepIn={onStepIn}

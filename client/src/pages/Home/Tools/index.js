@@ -9,6 +9,9 @@ import ToolsNav from "./ToolsNav";
 const windowEnum = { patterns: "patterns", history: "history" };
 
 const Tools = ({
+  step,
+  history,
+  onSetFromHistory,
   onStepIn,
   onStepOut,
   onTogglePlay,
@@ -27,7 +30,11 @@ const Tools = ({
         {window === windowEnum.patterns ? (
           <Patterns cellSide={cellSide} />
         ) : (
-          <History />
+          <History
+            activeStep={step}
+            history={history}
+            onSetFromHistory={onSetFromHistory}
+          />
         )}
         <LifeNav
           running={running}

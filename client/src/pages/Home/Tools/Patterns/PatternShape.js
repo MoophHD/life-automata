@@ -3,10 +3,11 @@ import { DragPreviewImage, useDrag } from "react-dnd";
 import styled from "styled-components";
 import { useEffect } from "react";
 
-const space = 4;
+const GLOBAL_SPACE = 4;
 const PatternShape = ({ globalCellSide, pattern, name }) => {
   const patternRef = useRef(null);
   const [cellSide, setCellSide] = useState(1);
+  const [space, setSpace] = useState(1);
   const [previewSrc, setPreviewSrc] = useState("");
   const [rect, setRect] = useState({ height: 1, width: 1 });
   const cols = pattern[0].length;
@@ -17,12 +18,18 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
       isDragging: !!monitor.isDragging(),
     }),
     begin: (monitor) => {
-      const rect = patternRef.current.getBoundingClientRect();
-      const monitorOffset = monitor.getClientOffset();
+      const monitorOffset = monitor.getInitialClientOffset();
+      const {
+        x,
+        y,
+        height,
+        width,
+      } = patternRef.current.parentNode.getBoundingClientRect();
 
+ 
       const pickOffset = {
-        x: rect.x - monitorOffset.x,
-        y: rect.y - monitorOffset.y,
+        x: (x - monitorOffset.x) / width,
+        y: (y - monitorOffset.y) / height,
       };
 
       return { type: "Pattern", ref: patternRef, pickOffset, pattern };
@@ -32,19 +39,19 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   // set cell side
   useEffect(() => {
     const rect = patternRef.current.getBoundingClientRect();
-
     const { width, height } = rect;
     setRect(rect);
-
+    const spaceCoef = GLOBAL_SPACE / globalCellSide;
     let cellSide;
-    // cell side is determined by the smallest ratio
     if (width / cols >= height / rows) {
-      cellSide = (width - space * (cols - 1)) / cols;
+      cellSide = width / (cols + spaceCoef * (cols - 1));
     } else {
-      cellSide = (height - space * (rows - 1)) / rows;
+      cellSide = height / (rows + spaceCoef * (rows - 1));
     }
+
+    setSpace(cellSide * spaceCoef);
     setCellSide(cellSide);
-  }, [patternRef, cols, rows]);
+  }, [patternRef, cols, rows, globalCellSide]);
 
   // handle draggable preview
   useEffect(() => {
@@ -58,6 +65,9 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     const nodes = clone.childNodes;
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].style.fill !== "none") nodes[i].style.fill = "#FC2323";
+
+      nodes[i].setAttribute("rx", 1);
+      nodes[i].setAttribute("ry", 1);
     }
 
     const string = new XMLSerializer().serializeToString(clone);
@@ -65,9 +75,15 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     var encoded = window.btoa(string);
     setPreviewSrc("data:image/svg+xml;base64," + encoded);
   }, [patternRef, rect, globalCellSide, cellSide]);
+
   return (
     <>
-      <Img preview={preview} previewSrc={previewSrc} />
+      <DragPreviewImage
+        anchorX={0}
+        anchorY={0}
+        connect={preview}
+        src={previewSrc}
+      />
       <ShapeContainer ref={drag}>
         <svg
           viewBox={`0 0 ${rect.width} ${rect.height} `}
@@ -88,8 +104,8 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
                 y={i * (cellSide + space)}
                 height={cellSide}
                 width={cellSide}
-                rx={8}
-                ry={8}
+                rx={4}
+                ry={4}
                 key={`${i}col ${j} row pattern cel`}
                 style={{ fill: !!num ? "#DADADA" : "none" }}
               />
@@ -102,23 +118,22 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   );
 };
 
-const Img = React.memo(({ preview, previewSrc }) => {
-  return <DragPreviewImage connect={preview} src={previewSrc} />;
-});
-
 export default PatternShape;
 
 const ShapeContainer = styled.div`
   //wtf?, fixed untranparent background
   transform: translate(0, 0);
+  width: 7.75rem;
   cursor: pointer;
   background-color: white;
   padding: 2rem 1.65rem 1rem;
   box-shadow: 0px 4px 0px #aeaeae;
   border-radius: 1.25rem;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   margin: 0.5rem;
   height: 10rem;
 `;
@@ -126,4 +141,5 @@ const ShapeContainer = styled.div`
 const Name = styled.span`
   text-transform: uppercase;
   font-weight: bold;
+  white-space: nowrap;
 `;

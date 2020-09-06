@@ -9,6 +9,7 @@ import ToolsNav from "./ToolsNav";
 const windowEnum = { patterns: "patterns", history: "history" };
 
 const Tools = ({
+  patterns,
   step,
   history,
   onSetFromHistory,
@@ -28,7 +29,7 @@ const Tools = ({
       <ToolsNav window={window} setWindow={setWindow} windowEnum={windowEnum} />
       <Container>
         {window === windowEnum.patterns ? (
-          <Patterns cellSide={cellSide} />
+          <Patterns patterns={patterns} cellSide={cellSide} />
         ) : (
           <History
             activeStep={step}

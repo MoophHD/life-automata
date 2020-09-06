@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useDrop } from "react-dnd";
 
+let cellSide = 10;
+
 const Grid = ({
   grid,
   space = 4,
@@ -14,13 +16,13 @@ const Grid = ({
   const [, drop] = useDrop({
     accept: "Pattern",
     drop: (item, monitor) => {
-      const { pattern } = item;
-      const pickOffset = { x: 0, y: 0 };
+      const { pattern, pickOffset } = item;
+
       const offset = monitor.getClientOffset();
       const { x, y } = canvasRef.current.getBoundingClientRect();
       const position = {
-        x: offset.x - x - pickOffset.x,
-        y: offset.y - y - pickOffset.y,
+        x: offset.x - x + 0.7 * pickOffset.x * cellSide * pattern[0].length,
+        y: offset.y - y + 0.7 * pickOffset.y * cellSide * pattern.length,
       };
       const { col, row } = getCoords(position.x, position.y);
 
@@ -48,7 +50,7 @@ const Grid = ({
     (ctx) => {
       ctx.clearRect(0, 0, width, height);
 
-      const cellSide = (width - space * (cols - 1)) / cols;
+      cellSide = (width - space * (cols - 1)) / cols;
       setCellSide(cellSide);
 
       for (let i = 0; i < rows; i++) {

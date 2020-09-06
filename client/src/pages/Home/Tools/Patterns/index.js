@@ -1,38 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 import PatternShape from "./PatternShape";
+import CustomScrollbars from '../../../../components/CustomScrollbars';
 
-const Patterns = ({
-  cellSide,
-  patterns = [
-
-    {
-      pattern: [
-        [1, 0, 1],
-        [1, 1, 0],
-      ],
-      name: "Square",
-    },
-  ],
-}) => {
-
+const Patterns = ({ cellSide, patterns = [] }) => {
   return (
-    <Container>
-      {patterns.map(({ pattern, name }, i) => (
-        <PatternShape
-          globalCellSide={cellSide}
-          pattern={pattern}
-          name={name}
-          key={`${i}th pattern shape`}
-        />
-      ))}
-    </Container>
+    <CustomScrollbars>
+      <Container>
+        {patterns.map(({ pattern, name }, i) => (
+          <PatternShape
+            globalCellSide={cellSide}
+            pattern={pattern}
+            name={name}
+            key={`${i}th pattern shape`}
+          />
+        ))}
+      </Container>
+    </CustomScrollbars>
   );
 };
 
 const Container = styled.div`
   flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

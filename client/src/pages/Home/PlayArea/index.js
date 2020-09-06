@@ -41,16 +41,6 @@ function PlayArea({
     return () => window.removeEventListener("resize", updateFreeRect);
   }, [containerRef]);
 
-  // const handleDrop = (e) => {
-  //   console.log(`dropped`);
-  // };
-
-  // const handleDrag = (e) => {
-  //   e.preventDefault();
-
-  //   console.log(`dragging`);
-  // };
-
   return (
     <Container>
       <NavBar />

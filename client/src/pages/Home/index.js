@@ -90,7 +90,7 @@ const Home = ({ navbar }) => {
   //lord forgive me
   const [cellSide, setCellSide] = useState(10);
 
-  const { grid, rows, cols, interval } = state;
+  const { interval } = state;
 
   const runningRef = useRef(running);
   runningRef.current = running;
@@ -123,7 +123,6 @@ const Home = ({ navbar }) => {
   };
 
   const onSetInterval = (interval) => {
-    console.log(interval);
     dispatch({ type: "set-interval", payload: interval });
   };
 

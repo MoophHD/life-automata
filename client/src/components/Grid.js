@@ -10,25 +10,20 @@ const Grid = ({
   style,
   setCellSide,
   onPutPattern,
-  connectDropTarget,
 }) => {
-  const [{ isOver, canDrop }, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: "Pattern",
     drop: (item, monitor) => {
       const { pattern } = item;
-      // const pickOffset = item.pickOffset;
       const pickOffset = { x: 0, y: 0 };
-
       const offset = monitor.getClientOffset();
-
       const { x, y } = canvasRef.current.getBoundingClientRect();
-
       const position = {
         x: offset.x - x - pickOffset.x,
         y: offset.y - y - pickOffset.y,
       };
-
       const { col, row } = getCoords(position.x, position.y);
+
       onPutPattern(row, col, pattern);
     },
   });
@@ -73,7 +68,7 @@ const Grid = ({
         }
       }
     },
-    [grid, space, width, cols, rows, height]
+    [grid, space, width, cols, rows, height, setCellSide]
   );
 
   useEffect(() => {

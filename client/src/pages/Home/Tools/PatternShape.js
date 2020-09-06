@@ -11,7 +11,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   const [rect, setRect] = useState({ height: 1, width: 1 });
   const cols = pattern[0].length;
   const rows = pattern.length;
-  const [{ dragging }, drag, preview] = useDrag({
+  const [, drag, preview] = useDrag({
     item: { type: "Pattern", ref: patternRef },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -25,8 +25,8 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
         y: rect.y - monitorOffset.y,
       };
 
-      return {type: "Pattern", ref: patternRef, pickOffset, pattern};
-    }
+      return { type: "Pattern", ref: patternRef, pickOffset, pattern };
+    },
   });
 
   // set cell side
@@ -44,8 +44,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
       cellSide = (height - space * (rows - 1)) / rows;
     }
     setCellSide(cellSide);
-  }, [patternRef]);
-  //, [patternRef]
+  }, [patternRef, cols, rows]);
 
   // handle draggable preview
   useEffect(() => {
@@ -59,7 +58,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
 
     const nodes = clone.childNodes;
     for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].style.fill != "none") nodes[i].style.fill = "#FC2323";
+      if (nodes[i].style.fill !== "none") nodes[i].style.fill = "#FC2323";
     }
 
     const string = new XMLSerializer().serializeToString(clone);
@@ -67,10 +66,9 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     var encoded = window.btoa(string);
 
     setPreviewSrc("data:image/svg+xml;base64," + encoded);
-  }, [patternRef, rect, globalCellSide]);
+  }, [patternRef, rect, globalCellSide, cellSide]);
   return (
     <>
-      {/* <DragPreviewImage connect={preview} src={previewSrc} /> */}
       <Img preview={preview} previewSrc={previewSrc} />
       <ShapeContainer ref={drag}>
         <svg
@@ -106,36 +104,11 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   );
 };
 
-const Img = React.memo(({preview, previewSrc}) => {
-  return <DragPreviewImage connect={preview} src={previewSrc} />
-})
-
-// export default React.memo(PatternShape, (prevProps, nextProps) => {
-//   if (nextProps.globalCellSide != prevProps.globalCellSide) {
-//     return true;
-//   }
-//   return false;
-// });
+const Img = React.memo(({ preview, previewSrc }) => {
+  return <DragPreviewImage connect={preview} src={previewSrc} />;
+});
 
 export default PatternShape;
-
-// export default DragSource(
-//   "Pattern",
-//   {
-//     beginDrag: (props) => ({ name: props.name }),
-//     endDrag(props, monitor) {
-//       const item = monitor.getItem();
-//       const dropResult = monitor.getDropResult();
-//       if (dropResult) {
-//         alert(`You dropped ${item.name} into ${dropResult.name}!`);
-//       }
-//     },
-//   },
-//   (connect, monitor) => ({
-//     connectDragSource: connect.dragSource(),
-//     isDragging: monitor.isDragging(),
-//   })
-// )(PatternShape);
 
 const ShapeContainer = styled.div`
   //wtf?, fixed untranparent background

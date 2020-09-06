@@ -26,7 +26,6 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
         width,
       } = patternRef.current.parentNode.getBoundingClientRect();
 
- 
       const pickOffset = {
         x: (x - monitorOffset.x) / width,
         y: (y - monitorOffset.y) / height,
@@ -42,6 +41,8 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     const { width, height } = rect;
     setRect(rect);
     const spaceCoef = GLOBAL_SPACE / globalCellSide;
+    if (spaceCoef === Infinity) return;
+
     let cellSide;
     if (width / cols >= height / rows) {
       cellSide = width / (cols + spaceCoef * (cols - 1));
@@ -58,7 +59,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     const clone = patternRef.current.cloneNode(true);
     let scaleCoef = globalCellSide / cellSide;
 
-    if (scaleCoef > 0) {
+    if (scaleCoef > 0 && scaleCoef !== Infinity) {
       clone.setAttribute("height", rect.height * scaleCoef);
       clone.setAttribute("width", rect.width * scaleCoef);
     }

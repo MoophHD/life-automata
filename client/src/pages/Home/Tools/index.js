@@ -22,6 +22,8 @@ const Tools = ({
   interval,
   running,
   cellSide,
+  rows,
+  cols
 }) => {
   const [window, setWindow] = useState(windowEnum.patterns);
   return (
@@ -44,6 +46,8 @@ const Tools = ({
           onTogglePlay={onTogglePlay}
         />
         <Controls
+          cols={cols}
+          rows={rows}
           interval={interval}
           onSetInterval={onSetInterval}
           onSetCols={onSetCols}

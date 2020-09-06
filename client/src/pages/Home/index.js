@@ -18,11 +18,14 @@ const MAX_HISTORY_STORAGE = 30;
 History model:
 { date: new window.Date().toISOString(), step: 1, grid: `` },
 */
+
+const ROWS = 20;
+const COLS = 20;
 const initialState = {
-  grid: generateEmptyGrid(20, 20),
+  grid: generateEmptyGrid(ROWS, COLS),
   step: 0,
-  rows: 20,
-  cols: 20,
+  rows: ROWS,
+  cols: COLS,
   interval: 650,
   // hashes/ids for history?
   history: [],
@@ -221,7 +224,7 @@ const Home = ({ navbar }) => {
     },
   ]);
 
-  const { interval, history, step, grid } = state;
+  const { interval, history, step, grid, rows, cols } = state;
 
   const runningRef = useRef(running);
   runningRef.current = running;
@@ -305,6 +308,8 @@ const Home = ({ navbar }) => {
           onTogglePlay={toggleRunning}
           cellSide={cellSide}
           patterns={patterns}
+          rows={rows}
+          cols={cols}
         />
       </Container>
     </DndProvider>

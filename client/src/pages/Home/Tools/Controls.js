@@ -8,8 +8,8 @@ const WAIT_INTERVAL = 500;
 const ENTER_KEY = 13;
 
 const Controls = ({
-  defaultX = 20,
-  defaultY = 20,
+  rows,
+  cols,
   onSetCols,
   onSetRows,
   onSetInterval,
@@ -79,7 +79,7 @@ const Controls = ({
               onChange={handleColSubmit}
               onKeyDown={handleColSubmit}
               name="x"
-              defaultValue={defaultX}
+              defaultValue={cols}
               hasError={!!errors.x}
               ref={register({ required: true, validate: dimensionValidation })}
             />
@@ -88,7 +88,7 @@ const Controls = ({
               onChange={handleRowSubmit}
               onKeyDown={handleRowSubmit}
               name="y"
-              defaultValue={defaultY}
+              defaultValue={rows}
               hasError={!!errors.y}
               ref={register({ required: true, validate: dimensionValidation })}
             />

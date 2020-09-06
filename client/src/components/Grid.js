@@ -39,18 +39,21 @@ const Grid = ({
   useEffect(() => {
     if (freeWidth / cols >= freeHeight / rows) {
       setHeight(freeHeight);
-      setWidth((cols / rows) * freeHeight - space);
+      setWidth((cols / rows) * freeHeight);
     } else {
       setWidth(freeWidth);
-      setHeight((rows / cols) * freeWidth - space);
+      setHeight((rows / cols) * freeWidth);
     }
   }, [freeHeight, freeWidth, cols, rows, space]);
 
   const draw = useCallback(
     (ctx) => {
       ctx.clearRect(0, 0, width, height);
-
-      cellSide = (width - space * (cols - 1)) / cols;
+      if (freeWidth / cols >= freeHeight / rows) {
+        cellSide = (height - space * (rows - 1)) / rows;
+      } else {
+        cellSide = (width - space * (cols - 1)) / cols;
+      }
       setCellSide(cellSide);
 
       for (let i = 0; i < rows; i++) {
@@ -70,7 +73,7 @@ const Grid = ({
         }
       }
     },
-    [grid, space, width, cols, rows, height, setCellSide]
+    [grid, space, width, cols, rows, height, setCellSide, freeHeight, freeWidth]
   );
 
   useEffect(() => {

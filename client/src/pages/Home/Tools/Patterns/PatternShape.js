@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { DragPreviewImage, useDrag } from "react-dnd";
 import styled from "styled-components";
 import { useEffect } from "react";
+import { compareSync } from "bcryptjs";
 
 const space = 4;
 const PatternShape = ({ globalCellSide, pattern, name }) => {
@@ -55,7 +56,6 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
       clone.setAttribute("height", rect.height * scaleCoef);
       clone.setAttribute("width", rect.width * scaleCoef);
     }
-
     const nodes = clone.childNodes;
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].style.fill !== "none") nodes[i].style.fill = "#FC2323";
@@ -64,7 +64,6 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     const string = new XMLSerializer().serializeToString(clone);
     // converts dom to base64
     var encoded = window.btoa(string);
-
     setPreviewSrc("data:image/svg+xml;base64," + encoded);
   }, [patternRef, rect, globalCellSide, cellSide]);
   return (

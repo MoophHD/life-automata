@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LifeNav from "./LifeNav";
+import LifeNav from "./LifeNav/";
 import Controls from "./Controls";
-import Patterns from "./Patterns";
+import Patterns from "./Patterns/";
 import History from "./History";
 import ToolsNav from "./ToolsNav";
 

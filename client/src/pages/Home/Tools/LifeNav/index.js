@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Icon from "../../../components/Icon";
+import Icon from "../../../../components/Icon";
 import PlayBtn from "./PlayBtn";
 
 const LifeNav = ({ running, onStepOut, onStepIn, onTogglePlay }) => {

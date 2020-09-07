@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const User = require("../models/user.model");
 
+const CLIENT_URL = "http://localhost:3001";
+
 router.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -24,6 +26,23 @@ router.post("/register", async (req, res) => {
   }
 });
 
+const socialAuthCallback = (req, res) => {
+  // if (req.user.error) {
+  //   res.status(401).json({
+  //     success: false,
+  //     message: `social auth failed: ${req.user.err}`,
+  //     error: req.user.err,
+  //   });
+  // } else
+  if (req.user) {
+    const email = req.user.email;
+    // return res.redirect(`${CLIENT_URL}/profile/${email}`);
+    return res.redirect(`/profile/${email}`);
+  } else {
+    return res.redirect("/login");
+  }
+};
+
 router.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] })
@@ -31,13 +50,8 @@ router.get(
 
 router.get(
   "/github/callback",
-  passport.authenticate("github", {
-    failureRedirect: "/",
-    successRedirect: "/",
-  }),
-  (req, res) => {
-    console.log(req.user);
-  }
+  passport.authenticate("github"),
+  socialAuthCallback
 );
 
 router.get(
@@ -47,13 +61,8 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/",
-    successRedirect: "/",
-  }),
-  (req, res) => {
-    res.send({});
-  }
+  passport.authenticate("google"),
+  socialAuthCallback
 );
 
 module.exports = router;

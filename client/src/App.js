@@ -1,54 +1,59 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHttp } from "./hooks/http.hook";
-import { useAuth } from "./hooks/auth.hook";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import AuthContext from "./context/auth.context";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import LangContext from "./context/lang.context";
-import Auth from './pages/Auth';
+import Auth from "./pages/Auth";
 
 function App() {
-  const { login, logout, userId } = useAuth();
   const { request } = useHttp();
+  const [isAuthentificated, setIsAuthentificated] = useState(false);
+  const [userId, setUserId] = useState(null);
 
-  let isAuthentificated = false;
+  const checkAuth = async () => {
+    if (isAuthentificated) return;
 
-  useEffect(() => {
-    async function requestUser() {
-      let data;
-      try {
-        data = await request("/api/user/");
-      } catch (e) {
-        data = null;
-      }
-      return data;
+    let data;
+    try {
+      data = await request("/api/user/");
+      // data = await fetch("/api/user", { credentials: "include" });
+    } catch (e) {
+      data = null;
     }
 
-    requestUser().then((data) => {
-      if (data) {
-        isAuthentificated = true;
-      }
-    });
-  }, [request]);
+    if (data) {
+      setIsAuthentificated(true);
+    }
+  };
+
+  useEffect(() => {
+    console.log(`checking auth`);
+    checkAuth();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ login, logout, userId, isAuthentificated }}>
-      <LangContext.Provider>
-        <Router>
-          <Switch>
-            <Route path="/profile">
-              <Profile />
-            </Route>
-            <Route path="/auth">
-              <Auth />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </Router>
-      </LangContext.Provider>
+    <AuthContext.Provider value={{ userId, isAuthentificated }}>
+      <Router>
+        <Switch>
+          <Route path="/profile">
+            {!isAuthentificated && <Redirect to="/auth" />}
+            <Profile />
+          </Route>
+          <Route path="/auth">
+            {isAuthentificated && <Redirect to="/profile" />}
+            <Auth />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
     </AuthContext.Provider>
   );
 }

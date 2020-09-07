@@ -7,14 +7,10 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  if (id.match(/^[0-9a-fA-F]{24}$/)) {
-    User.findById(id, (err, user) => {
-      done(err, user);
-    });
-  } else {
-    done(null, null);
-  }
+passport.deserializeUser(async (id, done) => {
+  await User.findById(id, function (err, user) {
+    done(err, user);
+  });
 });
 
 passport.use(
@@ -36,10 +32,11 @@ passport.use(
 
           await user.save();
         }
+        done(null, candidate || user);
       } catch (e) {
         console.log(`An error has occured in password.js middleware, ${e}`);
+        done(null, {});
       }
-      done(null, profile);
     }
   )
 );
@@ -63,10 +60,11 @@ passport.use(
           const user = new User({ username, email, provider: "Google" });
           await user.save();
         }
+        done(null, candidate || user);
       } catch (e) {
         console.log(`An error has occured in password.js middleware, ${e}`);
+        done(null, {});
       }
-      done(null, profile);
     }
   )
 );

@@ -9,8 +9,6 @@ const auth = (req, res, next) => {
 };
 
 router.get("/", auth, (req, res) => {
-  console.log(`user`);
-  console.log(req.user);
   res.status(201).json(req.user);
 });
 

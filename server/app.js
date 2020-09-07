@@ -8,10 +8,9 @@ const cookieSession = require("cookie-session");
 const app = express();
 app.set("trust proxy", 1);
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: true }));
-app.use(cookieSession({ maxAge: 24 * 60 * 60 * 1000, keys: ['secret']}));
-
+app.use(cookieSession({ maxAge: 24 * 60 * 60 * 1000, keys: ["secret"] }));
 
 //json middleware
 
@@ -22,7 +21,6 @@ app.use(passport.session());
 // routes
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/user", require("./routes/user.routes"));
-
 
 app.get("/", (req, res) => {
   res.send(req.user);

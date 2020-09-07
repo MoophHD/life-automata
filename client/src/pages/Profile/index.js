@@ -1,16 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Redirect } from "react-router";
 import AuthContext from "../../context/auth.context";
 
-const Profile = () => {
-  const { isAuthentificated, userId } = useContext(AuthContext);
+const Profile = (props) => {
+  const { isAuthentificated, checkAuth, userId } = useContext(AuthContext);
 
-  if (!isAuthentificated) return <Redirect to="/auth"/> 
-  return (
-    <>
-    
-    </>
-  )
+  return <>qweqwe</>;
 };
 
 export default Profile;

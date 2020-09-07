@@ -2,39 +2,40 @@ require("dotenv").config({ path: "./server/config/.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("./passport/setup");
+const bodyParser = require("body-parser");
+const cookieSession = require("cookie-session");
 
 const app = express();
+app.set("trust proxy", 1);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json({ extended: true }));
+app.use(cookieSession({ maxAge: 24 * 60 * 60 * 1000, keys: ['secret']}));
+
 
 //json middleware
-app.use(express.json({ extended: true }));
 
 // passport oauth middleware
 app.use(passport.initialize());
+app.use(passport.session());
 
 // routes
-app.use(express.json({ extended: true }));
 app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/user", require("./routes/user.routes"));
+
 
 app.get("/", (req, res) => {
-  res.send("Server");
-});
-
-app.get("/api/test", (req, res) => {
-  res.json({message: "stuff test"});
-});
-
-app.get("/test", (req, res) => {
-  res.json({message: "stuff test"});
+  res.send(req.user);
 });
 
 const PORT = process.env.PORT;
 async function start() {
   try {
-    // await mongoose.connect(process.env.MONGO_URI, {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    //   useCreateIndex: true,
-    // });
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    });
     app.listen(PORT, () => console.log(`App listening on port ${PORT}!`));
   } catch (e) {
     console.log(`Server error, message: ${e}`);

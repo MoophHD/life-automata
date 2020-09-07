@@ -26,19 +26,34 @@ router.post("/register", async (req, res) => {
 
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user:email"] }, (req, res) => {
-  })
+  passport.authenticate("github", { scope: ["user:email"] })
 );
-router.get("/github/callback", passport.authenticate("github"), (req, res) => {
-  res.send("Bruh");
-});
+
+router.get(
+  "/github/callback",
+  passport.authenticate("github", {
+    failureRedirect: "/",
+    successRedirect: "/",
+  }),
+  (req, res) => {
+    console.log(req.user);
+  }
+);
 
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
-router.get("/google/callback", passport.authenticate("google"), (req, res) => {
-  res.send("Bruh");
-});
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/",
+    successRedirect: "/",
+  }),
+  (req, res) => {
+    res.send({});
+  }
+);
 
 module.exports = router;

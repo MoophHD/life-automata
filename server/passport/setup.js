@@ -8,9 +8,13 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    User.findById(id, (err, user) => {
+      done(err, user);
+    });
+  } else {
+    done(null, null);
+  }
 });
 
 passport.use(

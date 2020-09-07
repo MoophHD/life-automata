@@ -320,7 +320,12 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 2fr minmax(min-content, 1fr);
   height: 100%;
-  width: 100vw;
+  width: 100%;
+
+  @media (max-width: 800px) {
+    grid-template-columns: none;
+    grid-template-rows: 2fr minmax(min-content, 1fr);
+  }
 `;
 
 export default Home;

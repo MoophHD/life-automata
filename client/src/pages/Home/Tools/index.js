@@ -5,9 +5,10 @@ import Controls from "./Controls";
 import Patterns from "./Patterns/";
 import History from "./History";
 import ToolsNav from "./ToolsNav";
+import useWindowSize from "../../../hooks/windowsize.hook";
 
+const BREAK_WIDTH = 800;
 const windowEnum = { patterns: "patterns", history: "history" };
-
 const Tools = ({
   patterns,
   step,
@@ -23,14 +24,23 @@ const Tools = ({
   running,
   cellSide,
   rows,
-  cols
+  cols,
 }) => {
+  const { width } = useWindowSize();
   const [window, setWindow] = useState(windowEnum.patterns);
+
   return (
     <Wrapper>
-      <ToolsNav window={window} setWindow={setWindow} windowEnum={windowEnum} />
+      {width >= BREAK_WIDTH && (
+        <ToolsNav
+          window={window}
+          setWindow={setWindow}
+          windowEnum={windowEnum}
+        />
+      )}
       <Container>
-        {window === windowEnum.patterns ? (
+
+        {width >= BREAK_WIDTH && window === windowEnum.patterns ? (
           <Patterns patterns={patterns} cellSide={cellSide} />
         ) : (
           <History
@@ -39,6 +49,7 @@ const Tools = ({
             onSetFromHistory={onSetFromHistory}
           />
         )}
+        
         <LifeNav
           running={running}
           onStepOut={onStepOut}

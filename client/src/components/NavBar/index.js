@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Icon from "../Icon";
+import LogoIcon from "../LogoIcon";
 
 const NavBar = ({ style }) => {
   // const [isEn, setIsEn] = useState(true);
@@ -9,7 +10,7 @@ const NavBar = ({ style }) => {
   return (
     <Container style={style}>
       <Link to="/">
-        <LogoIcon />
+        <LogoIcon style={{height:'2rem'}}/>
       </Link>
       <SideWrapper>
         {/* <LanguageToggle isEn={isEn} setIsEn={setIsEn} /> */}
@@ -37,18 +38,8 @@ const Svg = styled(Icon)`
 
 const SideWrapper = styled.div`
   display: flex;
-  align-items: center;  
-`
-
-const LogoIcon = () => (
-  <Svg style={{ height: "2rem" }} viewBox="0 0 47 50" fill="none">
-    <rect x="31" width="16" height="16" rx="4" fill="#FC2323" />
-    <rect x="31" y="17" width="16" height="16" rx="4" fill="#FC2323" />
-    <rect x="31" y="34" width="16" height="16" rx="4" fill="#FC2323" />
-    <rect x="14" y="34" width="16" height="16" rx="4" fill="#FC2323" />
-    <rect y="20" width="16" height="16" rx="4" fill="#FC2323" />
-  </Svg>
-);
+  align-items: center;
+`;
 
 const ProfileIcon = () => (
   <Svg width="48" height="49" viewBox="0 0 48 49" fill="none">

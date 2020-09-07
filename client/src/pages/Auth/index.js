@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import LogoIcon from "../../components/LogoIcon";
 
 const BRAND_COLOR = {
   GOOGLE: "#DC4A32",
@@ -9,7 +10,11 @@ const BRAND_COLOR = {
 const Auth = () => (
   <Wrapper>
     <Container>
-      <Title>SignUp</Title>
+      <TitleContainer>
+        <Title>SignUp to </Title>
+        <LogoIcon style={{height: '2rem', marginLeft: '2rem'}}/>
+      </TitleContainer>
+      <Line />
       <LinkContainer>
         <Link style={{ color: BRAND_COLOR.GOOGLE }} href="/api/auth/google">
           <i className="fab fa-google"></i>
@@ -29,10 +34,11 @@ const Auth = () => (
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: #0b0f34;
   height: 100vh;
   width: 100vw;
+  padding: 8rem 0;
 `;
 
 const Container = styled.div`
@@ -43,24 +49,37 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 2rem 1rem;
-  min-height: 20rem;
 
-  box-shadow: 0 0.25rem 0 .15rem rgba(103, 31, 194, 0.5);
+  box-shadow: 0 0.25rem 0 0.15rem rgba(103, 31, 194, 0.5);
+
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 2rem;
   color: white;
   margin: 0;
-  margin-bottom: 2rem;
 `;
 
 const LinkContainer = styled.div`
   width: 20rem;
+  @media (max-width: 400px) {
+    width: 100%;
+  }
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+`;
+
+const TitleContainer = styled.div`
+  width: 100%;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
 `;
 
 const Link = styled.a`
@@ -89,6 +108,13 @@ const LinkTitle = styled.span`
   text-align: center;
 `;
 
-const LinkIcon = styled.div``;
+const Line = styled.div`
+  width: 90%;
+  background-color: white;
+  opacity: .5;
+  height: 1px;
+  border-radius: 1px;
+  margin-bottom: 2rem;
+`
 
 export default Auth;

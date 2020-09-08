@@ -49,9 +49,7 @@ function App() {
             {isAuthentificated && <Redirect to="/profile" />}
             <Auth />
           </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          <Route path="/:id?" component={Home} />
         </Switch>
       </Router>
     </AuthContext.Provider>

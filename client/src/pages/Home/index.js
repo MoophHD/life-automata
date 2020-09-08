@@ -9,16 +9,14 @@ import styled from "styled-components";
 import PlayArea from "./PlayArea";
 import Tools from "./Tools";
 import { produce } from "immer";
-import { getNextGrid, generateEmptyGrid } from "./gridFunctions";
+import { getNextGrid, generateEmptyGrid } from "./misc/gridFunctions";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { patterns } from "./misc/patterns";
+import shortid from 'shortid';
+
 
 const MAX_HISTORY_STORAGE = 30;
-/*
-History model:
-{ date: new window.Date().toISOString(), step: 1, grid: `` },
-*/
-
 const ROWS = 20;
 const COLS = 20;
 const initialState = {
@@ -27,7 +25,6 @@ const initialState = {
   rows: ROWS,
   cols: COLS,
   interval: 650,
-  // hashes/ids for history?
   history: [],
 };
 
@@ -140,89 +137,10 @@ function reducer(state, action) {
   }
 }
 
-const Home = ({ navbar }) => {
+const Home = ({match}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [running, setRunning] = useState(false);
   const [cellSide, setCellSide] = useState(10);
-
-  const [patterns, setPatterns] = useState([
-    {
-      pattern: [
-        [1, 1],
-        [1, 1],
-      ],
-      name: "Square",
-    },
-    {
-      pattern: [
-        [0, 1, 1, 0],
-        [1, 0, 0, 1],
-        [0, 1, 1, 0],
-      ],
-      name: "Beehive",
-    },
-    {
-      pattern: [
-        [1, 1, 0],
-        [1, 0, 1],
-        [0, 1, 0],
-      ],
-      name: "Boat",
-    },
-    {
-      pattern: [
-        [0, 1, 0],
-        [1, 0, 1],
-        [0, 1, 0],
-      ],
-      name: "Tub",
-    },
-    {
-      pattern: [[1, 1, 1]],
-      name: "Blinker",
-    },
-    {
-      pattern: [
-        [0, 1, 1, 1],
-        [1, 1, 1, 0],
-      ],
-      name: "Toad",
-    },
-    {
-      pattern: [
-        [1, 1, 0, 0],
-        [1, 0, 0, 0],
-        [0, 0, 0, 1],
-        [0, 0, 1, 1],
-      ],
-      name: "Beakon",
-    },
-    {
-      pattern: [
-        [0, 1, 0],
-        [0, 0, 1],
-        [1, 1, 1],
-      ],
-      name: "Glider",
-    },
-    {
-      pattern: [
-        [0, 1, 0, 0, 1],
-        [1, 0, 0, 0, 0],
-        [1, 0, 0, 0, 1],
-        [1, 1, 1, 1, 0],
-      ],
-      name: "LWSS",
-    },
-    {
-      pattern: [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 1, 1, 1, 1, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-      ],
-      name: "Penta-D",
-    },
-  ]);
 
   const { interval, history, step, grid, rows, cols } = state;
 
@@ -233,8 +151,10 @@ const Home = ({ navbar }) => {
   intervalRef.current = interval;
 
   useEffect(() => {
-    // TODO: Fetch grid from db
-  }, []);
+    if (step >= 0 && !match.params.id) {
+      const id = shortid.generate();
+    }
+  }, [step]);
 
   const onStepIn = () => {
     dispatch({ type: "step-in" });

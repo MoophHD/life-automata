@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useHttp } from "./hooks/http.hook";
 import {
   BrowserRouter as Router,
@@ -14,15 +14,17 @@ import Auth from "./pages/Auth";
 function App() {
   const { request } = useHttp();
   const [isAuthentificated, setIsAuthentificated] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState('');
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     if (isAuthentificated) return;
 
     let data;
     try {
       data = await request("/api/user/");
-      // data = await fetch("/api/user", { credentials: "include" });
+
+      setUsername(data.username);
+
     } catch (e) {
       data = null;
     }
@@ -30,14 +32,14 @@ function App() {
     if (data) {
       setIsAuthentificated(true);
     }
-  };
+  }, [isAuthentificated, request]);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   return (
-    <AuthContext.Provider value={{ userId, isAuthentificated }}>
+    <AuthContext.Provider value={{ username, isAuthentificated }}>
       <Router>
         <Switch>
           <Route path="/profile">

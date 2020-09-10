@@ -171,15 +171,12 @@ const Home = ({ match }) => {
       onLoad(JSON.parse(grid), step);
     };
     fetchData();
-  }, [match.params.id]);
+  }, [match.params.id, request]);
 
   useEffect(() => {
-    if (step == 0 || !isAuthentificated) return;
+    if (step === 0 || !isAuthentificated) return;
 
-    console.log(`step ${step}`);
-
-    if (match.params.id && step % STEPS_TO_UPDATE == 0) {
-      console.log(`updating`);
+    if (match.params.id && step % STEPS_TO_UPDATE === 0) {
       const updateGrid = async () => {
         await request("/api/grid/update", "POST", {
           grid: JSON.stringify(grid),
@@ -195,13 +192,12 @@ const Home = ({ match }) => {
           grid: JSON.stringify(grid),
           step,
         });
-        console.log(`grid id ${data.grid.id}`);
         domHistory.push(`/${data.grid.id}`);
       };
 
       setGrid();
     }
-  }, [step]);
+  }, [step, domHistory, grid, isAuthentificated, match.params.id, request]);
 
   const onLoad = (grid, step) => {
     dispatch({ type: "load", payload: { grid, step } });

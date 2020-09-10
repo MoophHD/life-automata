@@ -27,16 +27,8 @@ router.post("/register", async (req, res) => {
 });
 
 const socialAuthCallback = (req, res) => {
-  // if (req.user.error) {
-  //   res.status(401).json({
-  //     success: false,
-  //     message: `social auth failed: ${req.user.err}`,
-  //     error: req.user.err,
-  //   });
-  // } else
   if (req.user) {
     const email = req.user.email;
-    // return res.redirect(`${CLIENT_URL}/profile/${email}`);
     return res.redirect(`/profile/${email}`);
   } else {
     return res.redirect("/login");

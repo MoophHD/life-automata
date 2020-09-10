@@ -21,10 +21,7 @@ app.use(passport.session());
 // routes
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/user", require("./routes/user.routes"));
-
-app.get("/", (req, res) => {
-  res.send(req.user);
-});
+app.use("/api/grid", require("./routes/grid.routes"));
 
 const PORT = process.env.PORT;
 async function start() {

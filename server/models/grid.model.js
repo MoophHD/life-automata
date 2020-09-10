@@ -1,10 +1,11 @@
 const { Schema, model, Types } = require("mongoose");
 
 const Grid = new Schema({
-  score: { type: Number, default: 0 },
-  height: { type: Number, required: true },
-  width: { type: Number, required: true },
-  automata: { type: String, enum: ["gameOfLife"] },
+  // score: { type: Number, default: 0 },
+  grid: { type: String },
+  step: { type: Number },
+  id: { type: String },
+  // automata: { type: String, enum: ["gameOfLife"] },
   owner: { type: Types.ObjectId, ref: "User" },
 });
 

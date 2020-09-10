@@ -4,6 +4,7 @@ import React, {
   useReducer,
   useCallback,
   useRef,
+  useContext,
 } from "react";
 import styled from "styled-components";
 import PlayArea from "./PlayArea";
@@ -13,10 +14,12 @@ import { getNextGrid, generateEmptyGrid } from "./misc/gridFunctions";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { patterns } from "./misc/patterns";
-import shortid from 'shortid';
-
+import AuthContext from "../../context/auth.context";
+import { useHttp } from "../../hooks/http.hook";
+import { useHistory } from "react-router-dom";
 
 const MAX_HISTORY_STORAGE = 30;
+const STEPS_TO_UPDATE = 5;
 const ROWS = 20;
 const COLS = 20;
 const initialState = {
@@ -32,6 +35,11 @@ function reducer(state, action) {
   const { grid, step, history } = state;
 
   switch (action.type) {
+    case "load": {
+      const { grid, step } = action.payload;
+    
+      return { ...state, grid, step };
+    }
     case "toggle-cell": {
       const { x, y } = action.payload;
       return {
@@ -137,10 +145,13 @@ function reducer(state, action) {
   }
 }
 
-const Home = ({match}) => {
+const Home = ({ match }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [running, setRunning] = useState(false);
   const [cellSide, setCellSide] = useState(10);
+  const { isAuthentificated } = useContext(AuthContext);
+  const { request } = useHttp();
+  const domHistory = useHistory();
 
   const { interval, history, step, grid, rows, cols } = state;
 
@@ -151,10 +162,50 @@ const Home = ({match}) => {
   intervalRef.current = interval;
 
   useEffect(() => {
-    if (step >= 0 && !match.params.id) {
-      const id = shortid.generate();
+    if (!match.params.id) return;
+
+    const fetchData = async () => {
+      const data = await request(`/api/grid/${match.params.id}`, "GET");
+
+      const { grid, step } = data;
+      onLoad(JSON.parse(grid), step);
+    };
+    fetchData();
+  }, [match.params.id]);
+
+  useEffect(() => {
+    if (step == 0 || !isAuthentificated) return;
+
+    console.log(`step ${step}`);
+
+    if (match.params.id && step % STEPS_TO_UPDATE == 0) {
+      console.log(`updating`);
+      const updateGrid = async () => {
+        await request("/api/grid/update", "POST", {
+          grid: JSON.stringify(grid),
+          step,
+          id: match.params.id
+        });
+      };
+
+      updateGrid();
+    } else if (!match.params.id) {
+      const setGrid = async () => {
+        const data = await request("/api/grid/generate", "POST", {
+          grid: JSON.stringify(grid),
+          step,
+        });
+        console.log(`grid id ${data.grid.id}`);
+        domHistory.push(`/${data.grid.id}`);
+      };
+
+      setGrid();
     }
   }, [step]);
+
+  const onLoad = (grid, step) => {
+    dispatch({ type: "load", payload: { grid, step } });
+  };
 
   const onStepIn = () => {
     dispatch({ type: "step-in" });

@@ -9,7 +9,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   const [cellSide, setCellSide] = useState(1);
   const [space, setSpace] = useState(1);
   const [previewSrc, setPreviewSrc] = useState("");
-  const [rect, setRect] = useState({ height: 1, width: 1 });
+  const [rect, setRect] = useState({ height: 0, width: 0 });
   const cols = pattern[0].length;
   const rows = pattern.length;
   const [, drag, preview] = useDrag({
@@ -57,13 +57,24 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   // handle draggable preview
   useEffect(() => {
     const clone = patternRef.current.cloneNode(true);
+    if (clone.getAttribute("height") === 0) {
+      return;
+    }
+
     let scaleCoef = globalCellSide / cellSide;
 
     if (scaleCoef > 0 && scaleCoef !== Infinity) {
       clone.setAttribute("height", rect.height * scaleCoef);
       clone.setAttribute("width", rect.width * scaleCoef);
+    } else {
+      return;
     }
     const nodes = clone.childNodes;
+
+    if (parseFloat(nodes[0].getAttribute("width")) > parseFloat(clone.getAttribute("width"))) {
+      return;
+    }
+
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].style.fill !== "none") nodes[i].style.fill = "#FC2323";
 
@@ -79,12 +90,14 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
 
   return (
     <>
-      <DragPreviewImage
+      <CustomPreview
         anchorX={0}
         anchorY={0}
         connect={preview}
         src={previewSrc}
+        name={name}
       />
+
       <ShapeContainer ref={drag}>
         <svg
           viewBox={`0 0 ${rect.width} ${rect.height} `}
@@ -118,6 +131,18 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     </>
   );
 };
+
+const CustomPreview = React.memo(
+  (props) => <DragPreviewImage {...props} />,
+  (prevProps, nextProps) => {
+
+    if (prevProps.src.length === 0 && nextProps.src.length > 0) {
+      return false;
+    }
+
+    return true;
+  }
+);
 
 export default PatternShape;
 

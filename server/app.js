@@ -2,8 +2,8 @@ require("dotenv").config({ path: "./server/config/.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("./passport/setup");
-const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
+const path = require('path');
 
 const app = express();
 app.set("trust proxy", 1);
@@ -25,10 +25,10 @@ app.use("/api/grid", require("./routes/grid.routes"));
 
 if (process.env.NODE_ENV === "production") {
   console.log(`in production`);
-  app.use("/", express.static(path.join(__dirname, "client", "build")));
+  app.use("/", express.static(path.join(__dirname, "/../client", "build")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
   });
 }
 

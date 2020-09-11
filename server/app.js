@@ -9,8 +9,8 @@ const app = express();
 app.set("trust proxy", 1);
 
 
-console.log(`git id ${process.env.GITHUB_CLIENT_ID}`);
-console.log(`git id ${process.env.GOOGLE_CLIENT_ID}`);
+console.log(`git id ${process.env.GITHUB_CALLBACK_URL}`);
+console.log(`git id ${process.env.MONGODB_URI}`);
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: true }));

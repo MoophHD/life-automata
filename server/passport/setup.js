@@ -4,6 +4,8 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/user.model");
 
 passport.serializeUser((user, done) => {
+  console.log(`serializing user`);
+  console.log(user);
   done(null, user.id);
 });
 
@@ -22,6 +24,8 @@ passport.use(
       scope: ["user:email"],
     },
     async (accessToken, refreshToken, profile, done) => {
+      console.log(`github passport callback`);
+      console.log(profile);
       try {
         const email = profile.emails[0].value;
         const username = profile.username;

@@ -3,8 +3,6 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const User = require("../models/user.model");
 
-const CLIENT_URL = "http://localhost:3001";
-
 router.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body;

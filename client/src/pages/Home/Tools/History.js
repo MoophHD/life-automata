@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import CustomScrollbars from "../../../components/CustomScrollbars";
 
-const History = ({ history, onSetFromHistory, activeStep }) => (
-  <CustomScrollbars>
-    <Container>
-      {history.map((historyItem, i) => (
-        <Item
-          active={historyItem.step === activeStep}
-          onClick={() => onSetFromHistory(historyItem.step)}
-          key={`dateline ${historyItem.step}th`}
-        >
-          <Step>step №{historyItem.step}</Step>
-          <Date>{historyItem.date}</Date>
-        </Item>
-      ))}
-    </Container>
-  </CustomScrollbars>
-);
+const History = ({ history, onSetFromHistory, activeStep }) => {
+  const scrollbarRef = useRef(null);
+  useEffect(() => {
+    console.log(scrollbarRef.current);
+    if (scrollbarRef.current) {
+      scrollbarRef.current.scrollToBottom();
+    }
+  }, [history]);
+
+  return (
+    <CustomScrollbars ref={scrollbarRef}>
+      <Container>
+        {history.map((historyItem, i) => (
+          <Item
+            active={historyItem.step === activeStep}
+            onClick={() => onSetFromHistory(historyItem.step)}
+            key={`dateline ${historyItem.step}th`}
+          >
+            <Step>step №{historyItem.step}</Step>
+            <Date>{historyItem.date}</Date>
+          </Item>
+        ))}
+      </Container>
+    </CustomScrollbars>
+  );
+};
 
 const Container = styled.ul`
   padding: 1rem 0;

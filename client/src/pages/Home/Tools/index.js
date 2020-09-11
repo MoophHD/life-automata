@@ -28,7 +28,6 @@ const Tools = ({
 }) => {
   const { width } = useWindowSize();
   const [window, setWindow] = useState(windowEnum.patterns);
-
   return (
     <Wrapper>
       {width >= BREAK_WIDTH && (
@@ -39,8 +38,7 @@ const Tools = ({
         />
       )}
       <Container>
-
-        {width >= BREAK_WIDTH && window === windowEnum.patterns ? (
+        {(width >= BREAK_WIDTH) && (window === windowEnum.patterns ? (
           <Patterns patterns={patterns} cellSide={cellSide} />
         ) : (
           <History
@@ -48,7 +46,7 @@ const Tools = ({
             history={history}
             onSetFromHistory={onSetFromHistory}
           />
-        )}
+        ))}
         
         <LifeNav
           running={running}

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 import { Scrollbars } from "react-custom-scrollbars";
 
-const CustomScrollbars = ({children}) => (
+const CustomScrollbars = forwardRef(({ children }, ref) => (
   <Scrollbars
+    ref={ref}
     renderTrackHorizontal={() => <Track />}
     renderThumbVertical={() => <Thump />}
-  >{children}</Scrollbars>
-);
+  >
+    {children}
+  </Scrollbars>
+));
 
 const Track = styled.div`
   background-color: rgba(256, 256, 256, 0.5);

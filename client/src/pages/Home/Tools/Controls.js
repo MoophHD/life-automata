@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Icon from "../../../components/Icon";
 import RangeInput from "../../../components/RangeInput";
@@ -16,8 +16,21 @@ const Controls = ({
   interval,
 }) => {
   const [folded, setFolded] = useState(false);
-  const { register, errors } = useForm({ mode: "onChange" });
+  const { register, errors, setValue, getValues } = useForm({
+    mode: "onChange",
+  });
   let timer = null;
+
+  useEffect(() => {
+    const { x, y } = getValues();
+    if (rows !== parseInt(y)) {
+      setValue("y", rows);
+    }
+
+    if (cols !== parseInt(x)) {
+      setValue("x", cols);
+    }
+  }, [setValue, getValues, rows, cols]);
 
   const dimensionValidation = {
     isInteger: (value) => !!parseInt(value),
@@ -61,7 +74,7 @@ const Controls = ({
   const handleIntervalChange = (e) => {
     const interval = parseInt(e.target.value);
     onSetInterval(interval);
-  }
+  };
 
   return (
     <>
@@ -173,6 +186,7 @@ const ToggleBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
+  align-self: end;
 `;
 
 const Svg = styled(Icon)`

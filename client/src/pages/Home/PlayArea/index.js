@@ -72,6 +72,10 @@ const GridWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: 3.75rem 6rem;
+
+  @media (max-width: 800px) {
+    padding: 1.5rem 2rem;
+  }
 `;
 
 export default PlayArea;

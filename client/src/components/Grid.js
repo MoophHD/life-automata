@@ -21,8 +21,8 @@ const Grid = ({
       const offset = monitor.getClientOffset();
       const { x, y } = canvasRef.current.getBoundingClientRect();
       const position = {
-        x: offset.x - x + 0.7 * pickOffset.x * cellSide * pattern[0].length,
-        y: offset.y - y + 0.7 * pickOffset.y * cellSide * pattern.length,
+        x: offset.x - x + 0.67 * pickOffset.x * cellSide * pattern[0].length,
+        y: offset.y - y + 0.67 * pickOffset.y * cellSide * pattern.length,
       };
       const { col, row } = getCoords(position.x, position.y);
 

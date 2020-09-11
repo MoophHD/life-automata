@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Grid from "../../../components/Grid";
 import NavBar from "../../../components/NavBar";
 
@@ -10,12 +10,15 @@ function PlayArea({
   onToggleCell,
   setCellSide,
   onPutPattern,
+  loadingGrid,
 }) {
   const containerRef = useRef(null);
   const [freeRect, setFreeRect] = useState({ width: 0, height: 0 });
   const [gridVisible, setGridVisible] = useState(true);
 
   useEffect(() => {
+    if (!containerRef.current) return;
+
     const updateFreeRect = () => {
       setGridVisible(false);
       const { height, width } = containerRef.current.getBoundingClientRect();
@@ -44,19 +47,25 @@ function PlayArea({
   return (
     <Container>
       <NavBar />
-      <GridWrapper ref={containerRef}>
-        <Grid
-          style={{ display: gridVisible ? "block" : "none" }}
-          freeHeight={freeRect.height}
-          freeWidth={freeRect.width}
-          onClickCell={onToggleCell}
-          running={running}
-          options={options}
-          grid={grid}
-          setCellSide={setCellSide}
-          onPutPattern={onPutPattern}
-        />
-      </GridWrapper>
+      {loadingGrid ? (
+        <Spinner>
+          <SpinnerImg src="https://sun9-29.userapi.com/woazS2SvPAv283AKVTeoE6aWCArYAc-H-VbDAg/qLvgVlAtSis.jpg"/>
+        </Spinner>
+      ) : (
+        <GridWrapper ref={containerRef}>
+          <Grid
+            style={{ display: gridVisible ? "block" : "none" }}
+            freeHeight={freeRect.height}
+            freeWidth={freeRect.width}
+            onClickCell={onToggleCell}
+            running={running}
+            options={options}
+            grid={grid}
+            setCellSide={setCellSide}
+            onPutPattern={onPutPattern}
+          />
+        </GridWrapper>
+      )}
     </Container>
   );
 }
@@ -76,6 +85,29 @@ const GridWrapper = styled.div`
   @media (max-width: 800px) {
     padding: 1.5rem 2rem;
   }
+`;
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
+const SpinnerImg = styled.img`
+  animation: ${rotate} 2s linear infinite;
+  height: 5rem;
+  width: 5rem;
 `;
 
 export default PlayArea;

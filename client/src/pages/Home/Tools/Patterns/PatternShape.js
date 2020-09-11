@@ -6,6 +6,7 @@ import { useEffect } from "react";
 const GLOBAL_SPACE = 4;
 const PatternShape = ({ globalCellSide, pattern, name }) => {
   const patternRef = useRef(null);
+  const [globalCellSideInPreview, setGlobalCellSideInPreview] = useState(globalCellSide);
   const [cellSide, setCellSide] = useState(1);
   const [space, setSpace] = useState(1);
   const [previewSrc, setPreviewSrc] = useState("");
@@ -57,9 +58,6 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
   // handle draggable preview
   useEffect(() => {
     const clone = patternRef.current.cloneNode(true);
-    if (clone.getAttribute("height") === 0) {
-      return;
-    }
 
     let scaleCoef = globalCellSide / cellSide;
 
@@ -69,9 +67,13 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     } else {
       return;
     }
+
     const nodes = clone.childNodes;
 
-    if (parseFloat(nodes[0].getAttribute("width")) > parseFloat(clone.getAttribute("width"))) {
+    if (
+      parseFloat(nodes[0].getAttribute("width")) >
+      parseFloat(clone.getAttribute("width"))
+    ) {
       return;
     }
 
@@ -85,8 +87,12 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
     const string = new XMLSerializer().serializeToString(clone);
     // converts dom to base64
     var encoded = window.btoa(string);
+
+    if (globalCellSideInPreview !== globalCellSide) {
+      setGlobalCellSideInPreview(globalCellSide);
+    }
     setPreviewSrc("data:image/svg+xml;base64," + encoded);
-  }, [patternRef, rect, globalCellSide, cellSide]);
+  }, [patternRef, rect, globalCellSide, cellSide, globalCellSideInPreview]);
 
   return (
     <>
@@ -96,6 +102,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
         connect={preview}
         src={previewSrc}
         name={name}
+        globalCellSideInPreview={globalCellSideInPreview}
       />
 
       <ShapeContainer ref={drag}>
@@ -135,6 +142,7 @@ const PatternShape = ({ globalCellSide, pattern, name }) => {
 const CustomPreview = React.memo(
   (props) => <DragPreviewImage {...props} />,
   (prevProps, nextProps) => {
+    if (nextProps.globalCellSideInPreview !== prevProps.globalCellSideInPreview) return false;
 
     if (prevProps.src.length === 0 && nextProps.src.length > 0) {
       return false;

@@ -1,13 +1,6 @@
 export const patterns = [
   {
     pattern: [
-      [1, 1],
-      [1, 1],
-    ],
-    name: "Square",
-  },
-  {
-    pattern: [
       [0, 1, 1, 0],
       [1, 0, 0, 1],
       [0, 1, 1, 0],

@@ -26,7 +26,7 @@ const Home = ({ match }) => {
   const [running, setRunning] = useState(false);
   const [cellSide, setCellSide] = useState(10);
   const { isAuthentificated } = useContext(AuthContext);
-  const { request } = useHttp();
+  const { request, loading } = useHttp();
   const domHistory = useHistory();
 
   const { interval, history, step, grid, rows, cols } = state;
@@ -130,6 +130,7 @@ const Home = ({ match }) => {
     <DndProvider backend={HTML5Backend}>
       <Container>
         <PlayArea
+          loadingGrid={loading && step === 0}
           step={step}
           grid={grid}
           running={running}

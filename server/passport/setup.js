@@ -4,8 +4,6 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/user.model");
 
 passport.serializeUser((user, done) => {
-  console.log(`serializing user`);
-  console.log(user);
   done(null, user.id);
 });
 
@@ -35,10 +33,6 @@ passport.use(
 
           await user.save();
         }
-        console.log(`user`)
-        console.log(user);
-        console.log(`candidate`);
-        console.log(candidate);
         done(null, candidate || user);
       } catch (e) {
         console.log(`An error has occured in password.js middleware, ${e}`);

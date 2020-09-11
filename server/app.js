@@ -9,8 +9,6 @@ const app = express();
 app.set("trust proxy", 1);
 
 
-console.log(`git id ${process.env.GITHUB_CALLBACK_URL}`);
-console.log(`git id ${process.env.MONGODB_URI}`);
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: true }));
@@ -28,7 +26,6 @@ app.use("/api/user", require("./routes/user.routes"));
 app.use("/api/grid", require("./routes/grid.routes"));
 
 if (process.env.NODE_ENV === "production") {
-  console.log(`in production`);
   app.use("/", express.static(path.join(__dirname, "/../client", "build")));
 
   app.get("*", (req, res) => {
@@ -36,7 +33,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 async function start() {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {

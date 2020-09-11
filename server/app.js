@@ -10,6 +10,8 @@ app.set("trust proxy", 1);
 
 
 console.log(`git id ${process.env.GITHUB_CLIENT_ID}`);
+console.log(`git id ${process.env.GOOGLE_CLIENT_ID}`);
+
 // app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ extended: true }));
 app.use(cookieSession({ maxAge: 24 * 60 * 60 * 1000, keys: ["secret"] }));

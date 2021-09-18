@@ -14,8 +14,8 @@ Client:
 * react-hook-form
 
 Server:
-* express
-* mongoose
+* node/express
+* mongodb/mongoose
 * passport
 
 # Description

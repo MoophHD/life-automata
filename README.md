@@ -1,6 +1,6 @@
 # Life automata
 
-Demo - https://life-automata.herokuapp.com/
+Demo (takes a lot of time to load due to free hosting :(, view the code, please) - https://life-automata.herokuapp.com/ 
 
 <img src="https://media0.giphy.com/media/H4i6ntnxbcmZVS6TQ2/giphy.gif" >
 

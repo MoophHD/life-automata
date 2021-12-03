@@ -1,7 +1,5 @@
 # Life automata
 
-Demo - https://life-automata.herokuapp.com/ 
-
 <img src="https://media0.giphy.com/media/H4i6ntnxbcmZVS6TQ2/giphy.gif" >
 
 # Core tech used:
